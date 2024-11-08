@@ -488,28 +488,33 @@ private ArrayList<Alocacao> alocacoes;
         String Nome = getString(sc, "Insira o nome: ");
         if(locais.stream().filter(a -> a.getNome().equalsIgnoreCase(Nome)).toList().isEmpty()){
             Integer Capacidade = getInteger(sc, "Insira a capacidade: ");
-            ArrayList<String> Recursos = new ArrayList<>();
-            while(true){
-                String tmp_recurso = getString(sc, ("Insira o " + Recursos.size()+1 + "º Recurso: "));
-                Recursos.add(tmp_recurso);
-                Integer stop;
-                while (true){
-                    stop = getInteger(sc, "Gostaria de inserir mais um Recurso(1 - Sim, 2 - Não): ");
-                    if(stop ==1 || stop == 2){
+            if(Capacidade > 0){
+                ArrayList<String> Recursos = new ArrayList<>();
+                while(true){
+                    String tmp_recurso = getString(sc, ("Insira o " + Recursos.size()+1 + "º Recurso: "));
+                    Recursos.add(tmp_recurso);
+                    Integer stop;
+                    while (true){
+                        stop = getInteger(sc, "Gostaria de inserir mais um Recurso(1 - Sim, 2 - Não): ");
+                        if(stop ==1 || stop == 2){
+                            break;
+                        }
+                        else{
+                            System.out.println("Valor inválido, insira novamente");
+                        }
+                    }
+                    if(stop == 2){
                         break;
                     }
-                    else{
-                        System.out.println("Valor inválido, insira novamente");
-                    }
                 }
-                if(stop == 2){
-                    break;
-                }
+                Local local = new Local(Nome, Capacidade);
+                local.setRecursos(Recursos);
+                locais.add(local);
+                System.out.println("Local adicionado com sucesso");
             }
-            Local local = new Local(Nome, Capacidade);
-            local.setRecursos(Recursos);
-            locais.add(local);
-            System.out.println("Local adicionado com sucesso");
+            else{
+                throw new Exception("Valor inválido");
+            }
         }
         else{
             throw new Exception("Nome inválido");
@@ -573,7 +578,7 @@ private ArrayList<Alocacao> alocacoes;
                 if(index_local >= 0 && index_local < locais.size()){
                     Local tmp = locais.get(index_local);
                     String Nome = getString(sc, "Insira o nome: ");
-                    if(locais.stream().filter(a -> a.getNome().equalsIgnoreCase(Nome)).toList().isEmpty()){
+                    if(locais.stream().filter(a -> a.getNome().equalsIgnoreCase(Nome)).toList().isEmpty() || tmp.getNome().equals(Nome)){
                         ArrayList<String> Recursos = new ArrayList<>();
                         while(true){
                             String tmp_recurso = getString(sc, ("Insira o " + Recursos.size()+1 + "º Recurso: "));
@@ -634,55 +639,100 @@ private ArrayList<Alocacao> alocacoes;
         LocalDateTime fim = LocalDateTime.parse(tmp_LocalDateTime);
         if(inicio.isBefore((fim))){
             String Nome = getString(sc, "Insira o nome: ");
-            String Descricao = getString(sc, "Insira a Descrição ");
+            String Descricao = getString(sc, "Insira a Descrição: ");
             Integer vagas = getInteger(sc, "Insira a quantidade de vagas: ");
-            boolean EmiteCertificado = sc.nextBoolean();
+            if(vagas > 0){
+                boolean EmiteCertificado = sc.nextBoolean();
 
-            Palestra palestra = new Palestra(Nome, Descricao, inicio, fim, vagas, EmiteCertificado);
-            palestras.add(palestra);
-
-            Integer choice;
-            while(true){
-                choice = getInteger(sc, "Adicionar local a palestra ?(1 - Sim, 2 - Não): ");
-                if(choice == 1){
-                    if(!locais.isEmpty()){
-                        for(Local local : locais){
-                            System.out.println("\n\nNúmero: " + locais.indexOf(local));
-                            System.out.println("Nome: " + local.getNome());
-                            System.out.println("Capacidade: " + local.getCapacidade());
-                            if (!local.getRecursos().isEmpty()){
-                                System.out.println("Recursos: ");
-                                for(String obj : local.getRecursos()){
-                                    System.out.println(obj);
+                Palestra palestra = new Palestra(Nome, Descricao, inicio, fim, vagas, EmiteCertificado);
+                palestras.add(palestra);
+    
+                Integer choice;
+                while(true){
+                    choice = getInteger(sc, "Adicionar local a palestra ?(1 - Sim, 2 - Não): ");
+                    if(choice == 1){
+                        if(!locais.isEmpty()){
+                            for(Local local : locais){
+                                System.out.println("\n\nNúmero: " + locais.indexOf(local));
+                                System.out.println("Nome: " + local.getNome());
+                                System.out.println("Capacidade: " + local.getCapacidade());
+                                if (!local.getRecursos().isEmpty()){
+                                    System.out.println("Recursos: ");
+                                    for(String obj : local.getRecursos()){
+                                        System.out.println(obj);
+                                    }
+                                }
+                                ArrayList<Alocacao> tmp_alocacoes = alocacoes.stream().filter(a -> a.getLocal().equals(local) || a.getLocal().getCapacidade()>=vagas).collect(Collectors.toCollection(ArrayList::new));
+                                if(!tmp_alocacoes.isEmpty()){
+                                    System.out.println("Palestras do local: ");
+                                    for(Alocacao alocacao : tmp_alocacoes){
+                                        System.out.println("\nNome: " + alocacao.getPalestra().getNome());
+                                        System.out.println("Descrição: " + alocacao.getPalestra().getDescricao());
+                                        System.out.println("Início: " + alocacao.getPalestra().getInicio());
+                                        System.out.println("Fim: " + alocacao.getPalestra().getFim() + "\n");
+                                    }
+                                }
+                                else{
+                                    System.out.println("Esse local não possui eventos");
+                                }
+                                System.out.println("\n\n");
+                            }
+                            while (true){
+                                Integer index_local = getInteger(sc, "Insira o Número do local a ser atrelado ou -1 para cancelar operação: ");
+                                if(index_local >= 0 && index_local < locais.size()){
+                                    Local local = locais.get(index_local);
+                                    ArrayList<Alocacao> tmp_alocacoes = alocacoes.stream().filter(a -> a.getLocal().equals(local)).collect(Collectors.toCollection(ArrayList::new));
+                                    if(tmp_alocacoes.isEmpty() ||  tmp_alocacoes.stream().filter(a -> (a.getPalestra().getInicio().isBefore(inicio) && a.getPalestra().getFim().isAfter(inicio)) || (a.getPalestra().getInicio().isBefore(fim) && a.getPalestra().getFim().isAfter(fim)) || (inicio.isBefore(a.getPalestra().getInicio()) && fim.isAfter(a.getPalestra().getInicio())) || (inicio.isBefore(a.getPalestra().getFim()) && fim.isAfter(a.getPalestra().getFim())) ).toList().isEmpty()){
+                                        Alocacao alocacao = new Alocacao(local, palestra);
+                                        alocacoes.add(alocacao);
+                                        System.out.println("Relação criada com sucesso");
+                                        break;
+                                    }
+                                    else if(index_local == -1){
+                                        break;
+                                    }
+                                    else{
+                                        System.out.println("Valor inválido, insira novamente");
+                                    }
                                 }
                             }
-                            ArrayList<Alocacao> tmp_alocacoes = alocacoes.stream().filter(a -> a.getLocal().equals(local) || a.getLocal().getCapacidade()>=vagas).collect(Collectors.toCollection(ArrayList::new));
-                            if(!tmp_alocacoes.isEmpty()){
-                                System.out.println("Palestras do local: ");
-                                for(Alocacao alocacao : tmp_alocacoes){
-                                    System.out.println("\nNome: " + alocacao.getPalestra().getNome());
-                                    System.out.println("\nDescrição: " + alocacao.getPalestra().getDescricao());
-                                    System.out.println("\nInício: " + alocacao.getPalestra().getInicio());
-                                    System.out.println("\nFim: " + alocacao.getPalestra().getFim() + "\n");
-                                }
-                            }
-                            else{
-                                System.out.println("Esse local não possui eventos");
-                            }
-                            System.out.println("\n\n");
                         }
-                        while (true){
-                            Integer index_local = getInteger(sc, "Insira o Número do local a ser atrelado ou -1 para cancelar operação: ");
-                            if(index_local >= 0 && index_local < locais.size()){
-                                Local local = locais.get(index_local);
-                                ArrayList<Alocacao> tmp_alocacoes = alocacoes.stream().filter(a -> a.getLocal().equals(local)).collect(Collectors.toCollection(ArrayList::new));
-                                if(tmp_alocacoes.isEmpty() ||  tmp_alocacoes.stream().filter(a -> (a.getPalestra().getInicio().isBefore(inicio) && a.getPalestra().getFim().isAfter(inicio)) || (a.getPalestra().getInicio().isBefore(fim) && a.getPalestra().getFim().isAfter(fim)) || (inicio.isBefore(a.getPalestra().getInicio()) && fim.isAfter(a.getPalestra().getInicio())) || (inicio.isBefore(a.getPalestra().getFim()) && fim.isAfter(a.getPalestra().getFim())) ).toList().isEmpty()){
-                                    Alocacao alocacao = new Alocacao(local, palestra);
-                                    alocacoes.add(alocacao);
+                        else{
+                            System.out.println("Sem locais adicionados");
+                            break;
+                        }
+                    }
+                    else if (choice == 2){
+                        break;
+                    }
+                    else{
+                        System.out.println("Valor inválido");
+                    }
+                }
+    
+    
+                choice = null;
+                while(true){
+                    choice = getInteger(sc, "Adicionar palestrante a palestra ?(1 - Sim, 2 - Não): ");
+                    if(choice == 1){
+                        if(!palestrantes.isEmpty()){
+                            for(Palestrante palestrante : palestrantes){
+                                System.out.println("\n\nNúmero: " + palestrantes.indexOf(palestrante));
+                                System.out.println("Nome: " + palestrante.getNome());
+                                System.out.println("Email: " + palestrante.getEmail());
+                                System.out.println("Endereço: " + palestrante.getEndereco());
+                                System.out.println("Especialidade: " + palestrante.getEspecialidade() + "\n\n");
+                            }
+                            while (true){
+                                Integer index_palestrante = getInteger(sc, "Insira o Número do palestrante a ser atrelado ou -1 para cancelar operação: ");
+                                if(index_palestrante >= 0 && index_palestrante < palestrantes.size()){
+                                    Palestrante palestrante = palestrantes.get(index_palestrante);
+                                    Apresentacao apresentacao = new Apresentacao(palestrante, palestra);
+                                    apresentacoes.add(apresentacao);
                                     System.out.println("Relação criada com sucesso");
-                                    break;
+                                    return;
                                 }
-                                else if(index_local == -1){
+                                else if(index_palestrante == -1){
                                     break;
                                 }
                                 else{
@@ -690,63 +740,24 @@ private ArrayList<Alocacao> alocacoes;
                                 }
                             }
                         }
-                    }
-                    else{
-                        System.out.println("Sem locais adicionados");
-                        break;
-                    }
-                }
-                else if (choice == 2){
-                    break;
-                }
-                else{
-                    System.out.println("Valor inválido");
-                }
-            }
-
-
-            choice = null;
-            while(true){
-                choice = getInteger(sc, "Adicionar palestrante a palestra ?(1 - Sim, 2 - Não): ");
-                if(choice == 1){
-                    if(!palestrantes.isEmpty()){
-                        for(Palestrante palestrante : palestrantes){
-                            System.out.println("\n\nNúmero: " + palestrantes.indexOf(palestrante));
-                            System.out.println("Nome: " + palestrante.getNome());
-                            System.out.println("Email: " + palestrante.getEmail());
-                            System.out.println("Endereço: " + palestrante.getEndereco());
-                            System.out.println("Especialidade: " + palestrante.getEspecialidade() + "\n\n");
-                        }
-                        while (true){
-                            Integer index_palestrante = getInteger(sc, "Insira o Número do palestrante a ser atrelado ou -1 para cancelar operação: ");
-                            if(index_palestrante >= 0 && index_palestrante < palestrantes.size()){
-                                Palestrante palestrante = palestrantes.get(index_palestrante);
-                                Apresentacao apresentacao = new Apresentacao(palestrante, palestra);
-                                apresentacoes.add(apresentacao);
-                                System.out.println("Relação criada com sucesso");
-                                return;
-                            }
-                            else if(index_palestrante == -1){
-                                return;
-                            }
-                            else{
-                                System.out.println("Valor inválido, insira novamente");
-                            }
+                        else{
+                            System.out.println("Sem palestrantes adicionados");
+                            break;
                         }
                     }
-                    else{
-                        System.out.println("Sem palestrantes adicionados");
+                    else if (choice == 2){
                         break;
                     }
+                    else{
+                        System.out.println("Valor inválido");
+                    }
                 }
-                else if (choice == 2){
-                    break;
-                }
-                else{
-                    System.out.println("Valor inválido");
-                }
+                System.out.println("Adição feita com sucesso");
+                return;
             }
-            System.out.println("Adição feita com sucesso");
+            else{
+                throw new Exception("Valor inválido");
+            }
         }
         else{
             throw new Exception("Horários inválidos");
@@ -820,9 +831,10 @@ private ArrayList<Alocacao> alocacoes;
                     System.out.println("Local da palestra: ");
                     System.out.println(alocacao.getLocal().getNome());
                 }
+                System.out.println("\n\n");
             }
             while (true){
-                Integer index_palestra = getInteger(sc, "Insira o Número da palestra a ser removida ou -1 para cancelar operação: ");
+                Integer index_palestra = getInteger(sc, "Insira o Número da palestra a ser editada ou -1 para cancelar operação: ");
                 if(index_palestra >= 0 && index_palestra < palestrantes.size()){
                     Palestra palestra = palestras.get(index_palestra);
                     Palestra palestra_de_busca = new Palestra(palestra.getNome(), palestra.getDescricao(), palestra.getInicio(), palestra.getFim(), palestra.getVagas(), palestra.isEmiteCertificado());
@@ -839,54 +851,57 @@ private ArrayList<Alocacao> alocacoes;
                     if(inicio.isBefore((fim))){
                         String Nome = getString(sc, "Insira o nome: ");
                         String Descricao = getString(sc, "Insira a Descrição ");
-                        Integer vagas = getInteger(sc, "Insira a quantidade de vagas: ");
-                        boolean EmiteCertificado = sc.nextBoolean();
-                        palestra.setNome(Nome);
-                        palestra.setDescricao(Descricao);
-                        palestra.setVagas(vagas);
-                        palestra.setInicio(inicio);
-                        palestra.setFim(fim);
-                        palestra.setEmiteCertificado(EmiteCertificado);
-                        Integer choice;
-                        while(true){
-                            choice = getInteger(sc, "Alterar local da palestra ?(1 - Sim, 2 - Não): ");
-                            if(choice == 1){
-                                if(!locais.isEmpty()){
-                                    for(Local local : locais){
-                                        System.out.println("\n\nNúmero: " + locais.indexOf(local));
-                                        System.out.println("Nome: " + local.getNome());
-                                        System.out.println("Capacidade: " + local.getCapacidade());
-                                        if (!local.getRecursos().isEmpty()){
-                                            System.out.println("Recursos: ");
-                                            for(String obj : local.getRecursos()){
-                                                System.out.println(obj);
+
+                            boolean EmiteCertificado = sc.nextBoolean();
+                            palestra.setNome(Nome);
+                            palestra.setDescricao(Descricao);
+                            palestra.setInicio(inicio);
+                            palestra.setFim(fim);
+                            palestra.setEmiteCertificado(EmiteCertificado);
+                            Integer choice;
+                            while(true){
+                                choice = getInteger(sc, "Alterar local da palestra ?(1 - Sim, 2 - Não): ");
+                                if(choice == 1){
+                                    if(!locais.isEmpty()){
+                                        for(Local local : locais){
+                                            System.out.println("\n\nNúmero: " + locais.indexOf(local));
+                                            System.out.println("Nome: " + local.getNome());
+                                            System.out.println("Capacidade: " + local.getCapacidade());
+                                            if (!local.getRecursos().isEmpty()){
+                                                System.out.println("Recursos: ");
+                                                for(String obj : local.getRecursos()){
+                                                    System.out.println(obj);
+                                                }
                                             }
-                                        }
-                                        ArrayList<Alocacao> tmp_alocacoes = alocacoes.stream().filter(a -> a.getLocal().equals(local) || a.getLocal().getCapacidade()>=vagas).collect(Collectors.toCollection(ArrayList::new));
-                                        if(!tmp_alocacoes.isEmpty()){
-                                            System.out.println("Palestras do local: ");
-                                            for(Alocacao alocacao : tmp_alocacoes){
-                                                System.out.println("\nNome: " + alocacao.getPalestra().getNome());
-                                                System.out.println("Descrição: " + alocacao.getPalestra().getDescricao());
-                                                System.out.println("Início: " + alocacao.getPalestra().getInicio());
-                                                System.out.println("Fim: " + alocacao.getPalestra().getFim() + "\n");
+                                            ArrayList<Alocacao> tmp_alocacoes = alocacoes.stream().filter(a -> a.getLocal().equals(local) || a.getLocal().getCapacidade()>=palestra.getVagas()).collect(Collectors.toCollection(ArrayList::new));
+                                            if(!tmp_alocacoes.isEmpty()){
+                                                System.out.println("Palestras do local: ");
+                                                for(Alocacao alocacao : tmp_alocacoes){
+                                                    System.out.println("\nNome: " + alocacao.getPalestra().getNome());
+                                                    System.out.println("Descrição: " + alocacao.getPalestra().getDescricao());
+                                                    System.out.println("Início: " + alocacao.getPalestra().getInicio());
+                                                    System.out.println("Fim: " + alocacao.getPalestra().getFim() + "\n");
+                                                }
                                             }
+                                            else{
+                                                System.out.println("Esse local não possui eventos");
+                                            }
+                                            System.out.println("\n\n");
                                         }
-                                        else{
-                                            System.out.println("Esse local não possui eventos");
-                                        }
-                                        System.out.println("\n\n");
-                                    }
-                                    while (true){
-                                        Integer index_local = getInteger(sc, "Insira o Número do local a ser atrelado ou -1 para cancelar operação: ");
-                                        if(index_local >= 0 && index_local < locais.size()){
-                                            Local local = locais.get(index_local);
-                                            ArrayList<Alocacao> tmp_alocacoes = alocacoes.stream().filter(a -> a.getLocal().equals(local)).collect(Collectors.toCollection(ArrayList::new));
-                                            if(tmp_alocacoes.isEmpty() ||  tmp_alocacoes.stream().filter(a -> (a.getPalestra().getInicio().isBefore(inicio) && a.getPalestra().getFim().isAfter(inicio)) || (a.getPalestra().getInicio().isBefore(fim) && a.getPalestra().getFim().isAfter(fim)) || (inicio.isBefore(a.getPalestra().getInicio()) && fim.isAfter(a.getPalestra().getInicio())) || (inicio.isBefore(a.getPalestra().getFim()) && fim.isAfter(a.getPalestra().getFim())) ).toList().isEmpty()){
-                                                alocacoes.removeIf(a -> a.getPalestra().equals(palestra_de_busca));
-                                                Alocacao alocacao = new Alocacao(local, palestra);
-                                                alocacoes.add(alocacao);
-                                                break;
+                                        while (true){
+                                            Integer index_local = getInteger(sc, "Insira o Número do local a ser atrelado ou -1 para cancelar operação: ");
+                                            if(index_local >= 0 && index_local < locais.size()){
+                                                Local local = locais.get(index_local);
+                                                ArrayList<Alocacao> tmp_alocacoes = alocacoes.stream().filter(a -> a.getLocal().equals(local)).collect(Collectors.toCollection(ArrayList::new));
+                                                if(tmp_alocacoes.isEmpty() ||  tmp_alocacoes.stream().filter(a -> (a.getPalestra().getInicio().isBefore(inicio) && a.getPalestra().getFim().isAfter(inicio)) || (a.getPalestra().getInicio().isBefore(fim) && a.getPalestra().getFim().isAfter(fim)) || (inicio.isBefore(a.getPalestra().getInicio()) && fim.isAfter(a.getPalestra().getInicio())) || (inicio.isBefore(a.getPalestra().getFim()) && fim.isAfter(a.getPalestra().getFim())) ).toList().isEmpty()){
+                                                    alocacoes.removeIf(a -> a.getPalestra().equals(palestra_de_busca));
+                                                    Alocacao alocacao = new Alocacao(local, palestra);
+                                                    alocacoes.add(alocacao);
+                                                    break;
+                                                }
+                                                else{
+                                                    System.out.println("Conflito com horários");
+                                                }
                                             }
                                             else if(index_local == -1){
                                                 break;
@@ -896,64 +911,63 @@ private ArrayList<Alocacao> alocacoes;
                                             }
                                         }
                                     }
+                                    else{
+                                        System.out.println("Sem locais adicionados");
+                                    }
+                                    break;
+                                }
+                                else if (choice == 2){
+                                    break;
                                 }
                                 else{
-                                    System.out.println("Sem locais adicionados");
+                                    System.out.println("Valor inválido");
                                 }
-                                break;
                             }
-                            else if (choice == 2){
-                                break;
-                            }
-                            else{
-                                System.out.println("Valor inválido");
-                            }
-                        }
-
-
-                        choice = null;
-                        while(true){
-                            choice = getInteger(sc, "Alterar palestrante da palestra ?(1 - Sim, 2 - Não): ");
-                            if(choice == 1){
-                                if(!palestrantes.isEmpty()){
-                                    for(Palestrante palestrante : palestrantes){
-                                        System.out.println("\n\nNúmero: " + palestrantes.indexOf(palestrante));
-                                        System.out.println("Nome: " + palestrante.getNome());
-                                        System.out.println("Email: " + palestrante.getEmail());
-                                        System.out.println("Endereço: " + palestrante.getEndereco());
-                                        System.out.println("Especialidade: " + palestrante.getEspecialidade() + "\n\n");
-                                    }
-                                    while (true){
-                                        Integer index_palestrante = getInteger(sc, "Insira o Número do palestrante a ser atrelado ou -1 para cancelar operação: ");
-                                        if(index_palestrante >= 0 && index_palestrante < palestrantes.size()){
-                                            Palestrante palestrante = palestrantes.get(index_palestrante);
-                                            apresentacoes.removeIf(a -> a.getPalestra().equals(palestra_de_busca));
-                                            Apresentacao apresentacao = new Apresentacao(palestrante, palestra);
-                                            apresentacoes.add(apresentacao);
-                                            break;
+    
+    
+                            choice = null;
+                            while(true){
+                                choice = getInteger(sc, "Alterar palestrante da palestra ?(1 - Sim, 2 - Não): ");
+                                if(choice == 1){
+                                    if(!palestrantes.isEmpty()){
+                                        for(Palestrante palestrante : palestrantes){
+                                            System.out.println("\n\nNúmero: " + palestrantes.indexOf(palestrante));
+                                            System.out.println("Nome: " + palestrante.getNome());
+                                            System.out.println("Email: " + palestrante.getEmail());
+                                            System.out.println("Endereço: " + palestrante.getEndereco());
+                                            System.out.println("Especialidade: " + palestrante.getEspecialidade() + "\n\n");
                                         }
-                                        else if(index_palestrante == -1){
-                                            break;
-                                        }
-                                        else{
-                                            System.out.println("Valor inválido, insira novamente");
+                                        while (true){
+                                            Integer index_palestrante = getInteger(sc, "Insira o Número do palestrante a ser atrelado ou -1 para cancelar operação: ");
+                                            if(index_palestrante >= 0 && index_palestrante < palestrantes.size()){
+                                                Palestrante palestrante = palestrantes.get(index_palestrante);
+                                                apresentacoes.removeIf(a -> a.getPalestra().equals(palestra_de_busca));
+                                                Apresentacao apresentacao = new Apresentacao(palestrante, palestra);
+                                                apresentacoes.add(apresentacao);
+                                                break;
+                                            }
+                                            else if(index_palestrante == -1){
+                                                break;
+                                            }
+                                            else{
+                                                System.out.println("Valor inválido, insira novamente");
+                                            }
                                         }
                                     }
+                                    else{
+                                        System.out.println("Sem locais adicionados");
+                                    }
+                                    break;
+                                }
+                                else if (choice == 2){
+                                    break;
                                 }
                                 else{
-                                    System.out.println("Sem locais adicionados");
+                                    System.out.println("Valor inválido");
                                 }
-                                break;
                             }
-                            else if (choice == 2){
-                                break;
-                            }
-                            else{
-                                System.out.println("Valor inválido");
-                            }
-                        }
-                        System.out.println("Edição feita com sucesso");
-                        return;
+                            System.out.println("Edição feita com sucesso");
+                            return;
                     }
                     else{
                         System.out.println("Horários inválidos");
@@ -1120,30 +1134,30 @@ private ArrayList<Alocacao> alocacoes;
     }
 
 
-    public String getString(Scanner sc, String txt){
-        try{
+public String getString(Scanner sc, String txt) {
+    while (true) {
+        try {
             System.out.print(txt);
             return sc.nextLine();
-        }
-        catch (Exception exception){
+        } catch (Exception exception) {
             System.out.println("Erro, insira o valor novamente");
-            getString(sc, txt);
+            sc.nextLine(); // Limpa o buffer caso haja um erro de entrada
         }
-        return null;
     }
+}
 
-    public Integer getInteger(Scanner sc, String txt){
-        try{
+public Integer getInteger(Scanner sc, String txt) {
+    while (true) {
+        try {
             System.out.print(txt);
             Integer tmp = sc.nextInt();
             sc.nextLine();
             return tmp;
-        }
-        catch (Exception exception){
+        } catch (Exception exception) {
             System.out.println("Erro, insira o valor novamente");
-            getInteger(sc, txt);
+            sc.nextLine(); // Limpa o buffer caso o usuário insira um valor não-inteiro
         }
-        return null;
     }
+}
 
 }
