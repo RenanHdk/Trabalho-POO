@@ -90,7 +90,7 @@ private ArrayList<Alocacao> alocacoes;
         this.inscricoes = inscricoes;
     }
 
-    public void AdicionarParticipante(Scanner sc) throws Exception{
+    public void AddParticipante(Scanner sc) throws Exception{
         String Email = getString(sc, "Insira o E-mail: ");
         if(participantes.stream().filter(a -> a.getEmail().equalsIgnoreCase(Email)).toList().isEmpty()){
             String Nome = getString(sc, "Insira o Nome: ");;
@@ -126,7 +126,7 @@ private ArrayList<Alocacao> alocacoes;
         }
     }
     
-    public void RemoverParticipante(Scanner sc) throws Exception{
+    public void RemoveParticipante(Scanner sc) throws Exception{
         if(!participantes.isEmpty()){
             for(Participante participante : participantes){
                 System.out.println("\n\nNúmero: " + participantes.indexOf(participante));
@@ -158,7 +158,7 @@ private ArrayList<Alocacao> alocacoes;
         }
     }
 
-    public void EditarParticipante(Scanner sc) throws Exception{
+    public void EditParticipante(Scanner sc) throws Exception{
         if(!participantes.isEmpty()){
             for(Participante participante : participantes){
                 System.out.println("\n\nNúmero: " + participantes.indexOf(participante));
@@ -219,6 +219,138 @@ private ArrayList<Alocacao> alocacoes;
             throw new Exception("Nenhum participante cadastrado");
         }
     }
+
+
+    public void AddPalestrante(Scanner sc) throws Exception{
+        String Email = getString(sc, "Insira o E-mail: ");
+        if(palestrantes.stream().filter(a -> a.getEmail().equalsIgnoreCase(Email)).toList().isEmpty()){
+            String Nome = getString(sc, "Insira o Nome: ");;
+            String Endereco = getString(sc, "Insira o seu Endereço: ");
+            String Especialidade = getString(sc, "Insira a especialidade do palestrante: ");
+            ArrayList<String> Telefone = new ArrayList<>();
+            while(true){
+                String tmp = getString(sc, ("Insira o " + Telefone.size()+1 + "º Telefone: "));
+                Telefone.add(tmp);
+                Integer stop;
+                while (true){
+                    stop = getInteger(sc, "Gostaria de inserir mais um Telefone(1 - Sim, 2 - Não): ");
+                    if(stop ==1 || stop == 2){
+                        break;
+                    }
+                    else{
+                        System.out.println("Valor inválido, insira novamente");
+                    }
+                }
+                if(stop == 2){
+                    break;
+                }
+            }
+
+            Palestrante palestrante = new Palestrante(Nome, Endereco, Email, Especialidade);
+            palestrante.setTelefone(Telefone);
+            palestrantes.add(palestrante);
+            System.out.println("Adicao feita com sucesso");
+        }
+        else{
+            throw new Exception("Email já utilizado");
+        }
+    }
+
+    public void RemovePalestrante(Scanner sc) throws Exception{
+        if(!palestrantes.isEmpty()){
+            for(Palestrante palestrante : palestrantes){
+                System.out.println("\n\nNúmero: " + palestrantes.indexOf(palestrante));
+                System.out.println("Nome: " + palestrante.getNome());
+                System.out.println("Email: " + palestrante.getEmail());
+                System.out.println("Endereço: " + palestrante.getEndereco());
+                System.out.println("Especialidade: " + palestrante.getEspecialidade() + "\n\n");
+            }
+            while (true){
+                Integer index_palestrante = getInteger(sc, "Insira o Número do participante a ser removido ou -1 para cancelar operação: ");
+                if(index_palestrante >= 0 && index_palestrante < palestrantes.size()){
+                    Palestrante tmp = palestrantes.get(index_palestrante);
+                    apresentacoes.removeIf(a -> a.getPalestrante().equals(tmp));
+                    palestrantes.remove(tmp);
+                    System.out.println("Remoção feita com sucesso");
+                    return;
+                }
+                else if(index_palestrante == -1){
+                    return;
+                }
+                else{
+                    System.out.println("Valor inválido, insira novamente");
+                }
+            }
+        }
+        else
+        {
+            throw new Exception("Nenhum palestrante cadastrado");
+        }
+    }
+
+    public void EditPalestrante(Scanner sc) throws Exception{
+        if(!palestrantes.isEmpty()){
+            for(Palestrante palestrante : palestrantes){
+                System.out.println("\n\nNúmero: " + palestrantes.indexOf(palestrante));
+                System.out.println("Nome: " + palestrante.getNome());
+                System.out.println("Email: " + palestrante.getEmail());
+                System.out.println("Endereço: " + palestrante.getEndereco());
+                System.out.println("Especialidade: " + palestrante.getEspecialidade() + "\n\n");
+            }
+            while (true){
+                Integer index_palestrante = getInteger(sc, "Insira o Número do palestrante a ser editado ou -1 para cancelar operação: ");
+                if(index_palestrante >= 0 && index_palestrante < palestrantes.size()){
+                    Palestrante tmp = palestrantes.get(index_palestrante);
+
+                    String Email = getString(sc, "Insira o E-mail: ");
+                    if(palestrantes.stream().filter(a -> a.getEmail().equalsIgnoreCase(Email)).toList().isEmpty() || tmp.getEmail().equalsIgnoreCase(Email)){
+                        String Nome = getString(sc, "Insira o Nome: ");;
+                        String Endereco = getString(sc, "Insira o seu Endereço: ");
+                        String Especialidade = getString(sc, "Insira a especialidade do palestrante: ");
+                        ArrayList<String> Telefone = new ArrayList<>();
+                        while(true){
+                            String tmp_telefone = getString(sc, ("Insira o " + Telefone.size()+1 + "º Telefone: "));
+                            Telefone.add(tmp_telefone);
+                            Integer stop;
+                            while (true){
+                                stop = getInteger(sc, "Gostaria de inserir mais um Telefone(1 - Sim, 2 - Não): ");
+                                if(stop ==1 || stop == 2){
+                                    break;
+                                }
+                                else{
+                                    System.out.println("Valor inválido, insira novamente");
+                                }
+                            }
+                            if(stop == 2){
+                                break;
+                            }
+                        }
+                        tmp.setEmail(Email);
+                        tmp.setNome(Nome);
+                        tmp.setEndereco(Endereco);
+                        tmp.setEspecialidade(Especialidade);
+                        tmp.setTelefone(Telefone);
+                        System.out.println("Edição feita com sucesso");
+                        return;
+                    }
+                    else{
+                        throw new Exception("Email inválido");
+                    }
+                }
+                else if(index_palestrante == -1){
+                    return;
+                }
+                else{
+                    System.out.println("Valor inválido, insira novamente");
+                }
+            }
+        }
+        else
+        {
+            throw new Exception("Nenhum palestrante cadastrado");
+        }
+    }
+
 
     public void Inscricao(Scanner sc) throws Exception{
         if(!participantes.isEmpty() && !palestras.isEmpty()){
@@ -350,137 +482,6 @@ private ArrayList<Alocacao> alocacoes;
             throw new Exception("Nenhuma palestra cadastrada");
         }
     }
-
-    public void AddPalestrante(Scanner sc) throws Exception{
-        String Email = getString(sc, "Insira o E-mail: ");
-        if(palestrantes.stream().filter(a -> a.getEmail().equalsIgnoreCase(Email)).toList().isEmpty()){
-            String Nome = getString(sc, "Insira o Nome: ");;
-            String Endereco = getString(sc, "Insira o seu Endereço: ");
-            String Especialidade = getString(sc, "Insira a especialidade do palestrante: ");
-            ArrayList<String> Telefone = new ArrayList<>();
-            while(true){
-                String tmp = getString(sc, ("Insira o " + Telefone.size()+1 + "º Telefone: "));
-                Telefone.add(tmp);
-                Integer stop;
-                while (true){
-                    stop = getInteger(sc, "Gostaria de inserir mais um Telefone(1 - Sim, 2 - Não): ");
-                    if(stop ==1 || stop == 2){
-                        break;
-                    }
-                    else{
-                        System.out.println("Valor inválido, insira novamente");
-                    }
-                }
-                if(stop == 2){
-                    break;
-                }
-            }
-
-            Palestrante palestrante = new Palestrante(Nome, Endereco, Email, Especialidade);
-            palestrante.setTelefone(Telefone);
-            palestrantes.add(palestrante);
-            System.out.println("Adicao feita com sucesso");
-        }
-        else{
-            throw new Exception("Email já utilizado");
-        }
-    }
-
-    public void RemovePalestrante(Scanner sc) throws Exception{
-        if(!palestrantes.isEmpty()){
-            for(Palestrante palestrante : palestrantes){
-                System.out.println("\n\nNúmero: " + palestrantes.indexOf(palestrante));
-                System.out.println("Nome: " + palestrante.getNome());
-                System.out.println("Email: " + palestrante.getEmail());
-                System.out.println("Endereço: " + palestrante.getEndereco());
-                System.out.println("Especialidade: " + palestrante.getEspecialidade() + "\n\n");
-            }
-            while (true){
-                Integer index_palestrante = getInteger(sc, "Insira o Número do participante a ser removido ou -1 para cancelar operação: ");
-                if(index_palestrante >= 0 && index_palestrante < palestrantes.size()){
-                    Palestrante tmp = palestrantes.get(index_palestrante);
-                    apresentacoes.removeIf(a -> a.getPalestrante().equals(tmp));
-                    palestrantes.remove(tmp);
-                    System.out.println("Remoção feita com sucesso");
-                    return;
-                }
-                else if(index_palestrante == -1){
-                    return;
-                }
-                else{
-                    System.out.println("Valor inválido, insira novamente");
-                }
-            }
-        }
-        else
-        {
-            throw new Exception("Nenhum palestrante cadastrado");
-        }
-    }
-
-    public void EditarPalestrante(Scanner sc) throws Exception{
-        if(!palestrantes.isEmpty()){
-            for(Palestrante palestrante : palestrantes){
-                System.out.println("\n\nNúmero: " + palestrantes.indexOf(palestrante));
-                System.out.println("Nome: " + palestrante.getNome());
-                System.out.println("Email: " + palestrante.getEmail());
-                System.out.println("Endereço: " + palestrante.getEndereco());
-                System.out.println("Especialidade: " + palestrante.getEspecialidade() + "\n\n");
-            }
-            while (true){
-                Integer index_palestrante = getInteger(sc, "Insira o Número do palestrante a ser editado ou -1 para cancelar operação: ");
-                if(index_palestrante >= 0 && index_palestrante < palestrantes.size()){
-                    Palestrante tmp = palestrantes.get(index_palestrante);
-
-                    String Email = getString(sc, "Insira o E-mail: ");
-                    if(palestrantes.stream().filter(a -> a.getEmail().equalsIgnoreCase(Email)).toList().isEmpty() || tmp.getEmail().equalsIgnoreCase(Email)){
-                        String Nome = getString(sc, "Insira o Nome: ");;
-                        String Endereco = getString(sc, "Insira o seu Endereço: ");
-                        String Especialidade = getString(sc, "Insira a especialidade do palestrante: ");
-                        ArrayList<String> Telefone = new ArrayList<>();
-                        while(true){
-                            String tmp_telefone = getString(sc, ("Insira o " + Telefone.size()+1 + "º Telefone: "));
-                            Telefone.add(tmp_telefone);
-                            Integer stop;
-                            while (true){
-                                stop = getInteger(sc, "Gostaria de inserir mais um Telefone(1 - Sim, 2 - Não): ");
-                                if(stop ==1 || stop == 2){
-                                    break;
-                                }
-                                else{
-                                    System.out.println("Valor inválido, insira novamente");
-                                }
-                            }
-                            if(stop == 2){
-                                break;
-                            }
-                        }
-                        tmp.setEmail(Email);
-                        tmp.setNome(Nome);
-                        tmp.setEndereco(Endereco);
-                        tmp.setEspecialidade(Especialidade);
-                        tmp.setTelefone(Telefone);
-                        System.out.println("Edição feita com sucesso");
-                        return;
-                    }
-                    else{
-                        throw new Exception("Email inválido");
-                    }
-                }
-                else if(index_palestrante == -1){
-                    return;
-                }
-                else{
-                    System.out.println("Valor inválido, insira novamente");
-                }
-            }
-        }
-        else
-        {
-            throw new Exception("Nenhum palestrante cadastrado");
-        }
-    }
-
 
 
     public void AddLocal(Scanner sc) throws Exception{
