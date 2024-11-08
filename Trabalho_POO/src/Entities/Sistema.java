@@ -800,12 +800,14 @@ private ArrayList<Alocacao> alocacoes;
                     System.out.println("Local da palestra: ");
                     System.out.println(alocacao.getLocal().getNome());
                 }
-
             }
             while (true){
                 Integer index_palestra = getInteger(sc, "Insira o Número da palestra a ser removida ou -1 para cancelar operação: ");
                 if(palestras.get(index_palestra) != null){
                     Palestra palestra = palestras.get(index_palestra);
+                    Palestra palestra_de_busca = new Palestra(palestra.getNome(), palestra.getDescricao(), palestra.getInicio(), palestra.getFim(), palestra.getVagas(), palestra.isEmiteCertificado());
+
+                    //Caso eu crie um objeto a partir de outro objeto e eu altero os atributos dele, o objeto criado também é alterado ??
 
                     String tmp_data = getString(sc, "Insira a data(yyyy-MM-dd): ");
                     //HH:mm
@@ -821,15 +823,12 @@ private ArrayList<Alocacao> alocacoes;
                         String Descricao = getString(sc, "Insira a Descrição ");
                         Integer vagas = getInteger(sc, "Insira a quantidade de vagas: ");
                         boolean EmiteCertificado = sc.nextBoolean();
-
                         palestra.setNome(Nome);
                         palestra.setDescricao(Descricao);
                         palestra.setVagas(vagas);
                         palestra.setInicio(inicio);
                         palestra.setFim(fim);
-
                         Integer choice;
-                        //MUDAR AQUIII
                         while(true){
                             choice = getInteger(sc, "Adicionar local a palestra ?(1 - Sim, 2 - Não): ");
                             if(choice == 1){
@@ -865,9 +864,9 @@ private ArrayList<Alocacao> alocacoes;
                                             Local local = locais.get(index_local);
                                             ArrayList<Alocacao> tmp_alocacoes = alocacoes.stream().filter(a -> a.getLocal().equals(local)).collect(Collectors.toCollection(ArrayList::new));
                                             if(tmp_alocacoes.isEmpty() ||  tmp_alocacoes.stream().filter(a -> (a.getPalestra().getInicio().isBefore(inicio) && a.getPalestra().getFim().isAfter(inicio)) || (a.getPalestra().getInicio().isBefore(fim) && a.getPalestra().getFim().isAfter(fim)) || (inicio.isBefore(a.getPalestra().getInicio()) && fim.isAfter(a.getPalestra().getInicio())) || (inicio.isBefore(a.getPalestra().getFim()) && fim.isAfter(a.getPalestra().getFim())) ).toList().isEmpty()){
+                                                alocacoes.removeIf(a -> a.getPalestra().equals(palestra_de_busca));
                                                 Alocacao alocacao = new Alocacao(local, palestra);
                                                 alocacoes.add(alocacao);
-
                                                 break;
                                             }
                                             else if(index_local == -1){
@@ -909,13 +908,13 @@ private ArrayList<Alocacao> alocacoes;
                                         Integer index_palestrante = getInteger(sc, "Insira o Número do palestrante a ser atrelado ou -1 para cancelar operação: ");
                                         if(palestrantes.get(index_palestrante) != null){
                                             Palestrante palestrante = palestrantes.get(index_palestrante);
+                                            apresentacoes.removeIf(a -> a.getPalestra().equals(palestra_de_busca));
                                             Apresentacao apresentacao = new Apresentacao(palestrante, palestra);
                                             apresentacoes.add(apresentacao);
-
-                                            return;
+                                            break;
                                         }
                                         else if(index_palestrante == -1){
-                                            return;
+                                            break;
                                         }
                                         else{
                                             System.out.println("Valor inválido, insira novamente");
@@ -934,18 +933,15 @@ private ArrayList<Alocacao> alocacoes;
                                 System.out.println("Valor inválido");
                             }
                         }
-                        System.out.println("Adição feita com sucesso");
+                        System.out.println("Edição feita com sucesso");
+                        return;
                     }
                     else{
                         System.out.println("Horários inválidos");
                     }
-
-
-                    System.out.println("Edição feita com sucesso");
-                    return;
                 }
                 else if(index_palestra == -1){
-                    return;
+                    break;
                 }
                 else{
                     System.out.println("Valor inválido, insira novamente");
