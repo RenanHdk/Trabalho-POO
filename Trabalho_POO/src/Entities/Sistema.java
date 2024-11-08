@@ -90,7 +90,7 @@ private ArrayList<Alocacao> alocacoes;
         this.inscricoes = inscricoes;
     }
 
-    public void AdicionarParticipante(Scanner sc){
+    public void AdicionarParticipante(Scanner sc) throws Exception{
         String Email = getString(sc, "Insira o E-mail: ");
         if(participantes.stream().filter(a -> a.getEmail().equalsIgnoreCase(Email)).toList().isEmpty()){
             String Nome = getString(sc, "Insira o Nome: ");;
@@ -122,11 +122,11 @@ private ArrayList<Alocacao> alocacoes;
             System.out.println("Adição feita com sucesso");
         }
         else{
-            System.out.println("E-mail inválido");
+            throw new Exception("Email já utilizado");
         }
     }
     
-    public void RemoverParticipante(Scanner sc){
+    public void RemoverParticipante(Scanner sc) throws Exception{
         if(!participantes.isEmpty()){
             for(Participante participante : participantes){
                 System.out.println("\n\nNúmero: " + participantes.indexOf(participante));
@@ -154,11 +154,11 @@ private ArrayList<Alocacao> alocacoes;
         }
         else
         {
-            System.out.println("Nenhum participante cadastrado");
+            throw new Exception("Nenhum participante cadastrado");
         }
     }
 
-    public void EditarParticipante(Scanner sc){
+    public void EditarParticipante(Scanner sc) throws Exception{
         if(!participantes.isEmpty()){
             for(Participante participante : participantes){
                 System.out.println("\n\nNúmero: " + participantes.indexOf(participante));
@@ -203,8 +203,7 @@ private ArrayList<Alocacao> alocacoes;
                         return;
                     }
                     else{
-                        System.out.println("E-mail inválido");
-                        return;
+                        throw new Exception("Email já utilizado");
                     }
                 }
                 else if(index_participante == -1){
@@ -217,11 +216,11 @@ private ArrayList<Alocacao> alocacoes;
         }
         else
         {
-            System.out.println("Nenhum participante cadastrado");
+            throw new Exception("Nenhum participante cadastrado");
         }
     }
 
-    public void Inscricao(Scanner sc){
+    public void Inscricao(Scanner sc) throws Exception{
         if(!participantes.isEmpty() && !palestras.isEmpty()){
             for(Participante participante : participantes){
                 System.out.println("\n\nNúmero: " + participantes.indexOf(participante));
@@ -230,7 +229,6 @@ private ArrayList<Alocacao> alocacoes;
                 System.out.println("Email: " + participante.getEmail());
                 System.out.println("Endereço: " + participante.getEndereco() + "\n\n");
             }
-
             while (true){
                 Integer index_participante = getInteger(sc, "Insira o Número do participante a ser inscrito ou -1 para cancelar operação: ");
                 if(index_participante >= 0 && index_participante < participantes.size()){
@@ -275,13 +273,16 @@ private ArrayList<Alocacao> alocacoes;
                 }
             }
         }
-        else
+        else if(participantes.isEmpty())
         {
-            System.out.println("Nenhum participante cadastrado");
+            throw new Exception("Nenhum participante cadastrado");
+        }
+        else{
+            throw new Exception("Nenhuma palestra cadastrada");
         }
     }
 
-    public void RemoverInscricao(Scanner sc){
+    public void RemoverInscricao(Scanner sc) throws Exception{
         if(!participantes.isEmpty() && !inscricoes.isEmpty()){
             for(Participante participante : participantes){
                 System.out.println("\n\nNúmero: " + participantes.indexOf(participante));
@@ -290,46 +291,67 @@ private ArrayList<Alocacao> alocacoes;
                 System.out.println("Email: " + participante.getEmail());
                 System.out.println("Endereço: " + participante.getEndereco() + "\n\n");
             }
-            int index_participante = sc.nextInt();
-            sc.nextLine();
-            Participante participante = participantes.get(index_participante);
-            if(participante != null){
-                ArrayList<Inscricao> inscricoes_tmp = inscricoes.stream().filter(a -> a.getParticipante().equals(participante)).collect(Collectors.toCollection(ArrayList::new));
-                if(!inscricoes_tmp.isEmpty()){
-                    for(Inscricao inscricao : inscricoes_tmp){
-                        System.out.println("\n\nNúmero: " + inscricoes.indexOf(inscricao));
-                        System.out.println("Nome: " + inscricao.getPalestra().getNome());
-                        System.out.println("Início: " + inscricao.getPalestra().getInicio());
-                        System.out.println("Fim: " + inscricao.getPalestra().getFim());
+            while (true) {
+                Integer index_participante = getInteger(sc, "Insira o Número do participante ou -1 para cancelar operação: ");
+                if(index_participante >= 0 && index_participante < participantes.size()){
+                    Participante participante = participantes.get(index_participante);
+                    ArrayList<Inscricao> tmp_inscricoes = inscricoes.stream().filter(a -> a.getParticipante().equals(participante)).collect(Collectors.toCollection(ArrayList::new));
+                    if(!tmp_inscricoes.isEmpty()){
+                        for(Inscricao inscricao : tmp_inscricoes){
+                            System.out.println("\n\nNome: " + inscricao.getPalestra().getNome());
+                            System.out.println("Descrição: " + inscricao.getPalestra().getDescricao());
+                            System.out.println("Capacidade de vagas: " + inscricao.getPalestra().getVagas());
+                            System.out.println("Início: " + inscricao.getPalestra().getInicio());
+                            System.out.println("Fim: " + inscricao.getPalestra().getFim());
+                            Apresentacao apresentacao = apresentacoes.stream().filter(a -> a.getPalestra().equals(inscricao.getPalestra())).findAny().orElse(null);
+                            if(apresentacao != null){
+                                System.out.println("Palestrante responsável: ");
+                                System.out.println("Nome: " + apresentacao.getPalestrante().getNome());
+                                System.out.println("Email: " + apresentacao.getPalestrante().getEmail());
+                            }
+                            Alocacao alocacao = alocacoes.stream().filter(a -> a.getPalestra().equals(inscricao.getPalestra())).findAny().orElse(null);
+                            if(alocacao != null){
+                                System.out.println("Local da palestra: ");
+                                System.out.println(alocacao.getLocal().getNome());
+                            }
+                        }
+
+
+                        int index_inscricao = sc.nextInt();
+                        sc.nextLine();
+                        inscricoes.remove(index_inscricao);
+                        Inscricao inscricao = inscricoes.get(index_inscricao);
+                        if(inscricao != null){
+                            inscricoes.remove(inscricao);
+                            System.out.println("Remocao feita com sucesso");
+                        }
+                        else
+                        {
+                            System.out.println("Valor inválido");
+                        }
                     }
-                    int index_inscricao = sc.nextInt();
-                    sc.nextLine();
-                    inscricoes.remove(index_inscricao);
-                    Inscricao inscricao = inscricoes.get(index_inscricao);
-                    if(inscricao != null){
-                        inscricoes.remove(inscricao);
-                        System.out.println("Remocao feita com sucesso");
+                    else{
+                        System.out.println("Esse participante nao possui inscricoes");
                     }
-                    else
-                    {
-                        System.out.println("Valor inválido");
-                    }
+                }
+                else if(index_participante == -1){
+                    return;
                 }
                 else{
-                    System.out.println("Esse participante nao possui inscricoes");
+                    System.out.println("Valor inválido");
                 }
             }
-            else
-            {
-                System.out.println("Valor inválido");
-            }
+        }
+        else if(participantes.isEmpty())
+        {
+            throw new Exception("Nenhum participante cadastrado");
         }
         else{
-            System.out.println("Nenhum participante cadastrado");
+            throw new Exception("Nenhuma palestra cadastrada");
         }
     }
 
-    public void AddPalestrante(Scanner sc){
+    public void AddPalestrante(Scanner sc) throws Exception{
         String Email = getString(sc, "Insira o E-mail: ");
         if(palestrantes.stream().filter(a -> a.getEmail().equalsIgnoreCase(Email)).toList().isEmpty()){
             String Nome = getString(sc, "Insira o Nome: ");;
@@ -360,11 +382,11 @@ private ArrayList<Alocacao> alocacoes;
             System.out.println("Adicao feita com sucesso");
         }
         else{
-            System.out.println("E-mail invalido");
+            throw new Exception("Email já utilizado");
         }
     }
 
-    public void RemovePalestrante(Scanner sc){
+    public void RemovePalestrante(Scanner sc) throws Exception{
         if(!palestrantes.isEmpty()){
             for(Palestrante palestrante : palestrantes){
                 System.out.println("\n\nNúmero: " + palestrantes.indexOf(palestrante));
@@ -392,11 +414,11 @@ private ArrayList<Alocacao> alocacoes;
         }
         else
         {
-            System.out.println("Nenhum palestrante cadastrado");
+            throw new Exception("Nenhum palestrante cadastrado");
         }
     }
 
-    public void EditarPalestrante(Scanner sc){
+    public void EditarPalestrante(Scanner sc) throws Exception{
         if(!palestrantes.isEmpty()){
             for(Palestrante palestrante : palestrantes){
                 System.out.println("\n\nNúmero: " + palestrantes.indexOf(palestrante));
@@ -442,29 +464,26 @@ private ArrayList<Alocacao> alocacoes;
                         return;
                     }
                     else{
-                        System.out.println("E-mail inválido");
+                        throw new Exception("Email inválido");
                     }
-                    System.out.println("Remoção feita com sucesso");
-                    return;
                 }
                 else if(index_palestrante == -1){
                     return;
                 }
                 else{
                     System.out.println("Valor inválido, insira novamente");
-                    return;
                 }
             }
         }
         else
         {
-            System.out.println("Nenhum palestrante cadastrado");
+            throw new Exception("Nenhum palestrante cadastrado");
         }
     }
 
 
 
-    public void AddLocal(Scanner sc){
+    public void AddLocal(Scanner sc) throws Exception{
         String Nome = getString(sc, "Insira o nome: ");
         if(locais.stream().filter(a -> a.getNome().equalsIgnoreCase(Nome)).toList().isEmpty()){
             Integer Capacidade = getInteger(sc, "Insira a capacidade: ");
@@ -492,15 +511,15 @@ private ArrayList<Alocacao> alocacoes;
             System.out.println("Local adicionado com sucesso");
         }
         else{
-            System.out.println("Nome inválido");
+            throw new Exception("Nome inválido");
         }
     }
 
 
-    public void RemoveLocal(Scanner sc){
+    public void RemoveLocal(Scanner sc) throws Exception{
         if(!locais.isEmpty()){
             for(Local local : locais){
-                System.out.println("Número: " + locais.indexOf(local));
+                System.out.println("\n\nNúmero: " + locais.indexOf(local));
                 System.out.println("Nome: " + local.getNome());
                 System.out.println("Capacidade: " + local.getCapacidade());
                 if (!local.getRecursos().isEmpty()){
@@ -509,6 +528,7 @@ private ArrayList<Alocacao> alocacoes;
                         System.out.println(obj);
                     }
                 }
+                System.out.println("\n\n");
             }
             while (true){
                 Integer index_local = getInteger(sc, "Insira o Número do local a ser removido ou -1 para cancelar operação: ");
@@ -528,12 +548,12 @@ private ArrayList<Alocacao> alocacoes;
             }
         }
         else{
-            System.out.println("Nenhum local cadastrado");
+            throw new Exception("Nenhum local cadastrado");
         }
     }
 
 
-    public void EditLocal(Scanner sc){
+    public void EditLocal(Scanner sc) throws Exception{
         if(!locais.isEmpty()){
             for(Local local : locais){
                 System.out.println("\n\nNúmero: " + locais.indexOf(local));
@@ -577,8 +597,7 @@ private ArrayList<Alocacao> alocacoes;
                         return;
                     }
                     else{
-                        System.out.println("Nome inválido");
-                        return;
+                        throw new Exception("Nome inválido");
                     }
                 }
                 else if(index_local == -1){
@@ -590,7 +609,7 @@ private ArrayList<Alocacao> alocacoes;
             }
         }
         else{
-            System.out.println("Nenhum local cadastrado");
+            throw new Exception("Nenhum local cadastrado");
         }
     }
 
@@ -602,11 +621,11 @@ private ArrayList<Alocacao> alocacoes;
 
 
 
-    public void AddPalestra(Scanner sc){
+    public void AddPalestra(Scanner sc) throws Exception{
         String tmp_data = getString(sc, "Insira a data(yyyy-MM-dd): ");
         //HH:mm
-        String hora_inicio = getString(sc, "Insira a hora de início: ");
-        String hora_fim = getString(sc, "Insira a hora de finalização: ");
+        String hora_inicio = getString(sc, "Insira a hora de início(HH:mm): ");
+        String hora_fim = getString(sc, "Insira a hora de finalização(HH:mm): ");
         //yyyy-MM-ddTHH:mm
         String tmp_LocalDateTime = tmp_data+"T"+hora_inicio;
         LocalDateTime inicio = LocalDateTime.parse(tmp_LocalDateTime);
@@ -659,7 +678,7 @@ private ArrayList<Alocacao> alocacoes;
                                 if(tmp_alocacoes.isEmpty() ||  tmp_alocacoes.stream().filter(a -> (a.getPalestra().getInicio().isBefore(inicio) && a.getPalestra().getFim().isAfter(inicio)) || (a.getPalestra().getInicio().isBefore(fim) && a.getPalestra().getFim().isAfter(fim)) || (inicio.isBefore(a.getPalestra().getInicio()) && fim.isAfter(a.getPalestra().getInicio())) || (inicio.isBefore(a.getPalestra().getFim()) && fim.isAfter(a.getPalestra().getFim())) ).toList().isEmpty()){
                                     Alocacao alocacao = new Alocacao(local, palestra);
                                     alocacoes.add(alocacao);
-
+                                    System.out.println("Relação criada com sucesso");
                                     break;
                                 }
                                 else if(index_local == -1){
@@ -673,8 +692,8 @@ private ArrayList<Alocacao> alocacoes;
                     }
                     else{
                         System.out.println("Sem locais adicionados");
+                        break;
                     }
-                    break;
                 }
                 else if (choice == 2){
                     break;
@@ -703,7 +722,7 @@ private ArrayList<Alocacao> alocacoes;
                                 Palestrante palestrante = palestrantes.get(index_palestrante);
                                 Apresentacao apresentacao = new Apresentacao(palestrante, palestra);
                                 apresentacoes.add(apresentacao);
-
+                                System.out.println("Relação criada com sucesso");
                                 return;
                             }
                             else if(index_palestrante == -1){
@@ -715,9 +734,9 @@ private ArrayList<Alocacao> alocacoes;
                         }
                     }
                     else{
-                        System.out.println("Sem locais adicionados");
+                        System.out.println("Sem palestrantes adicionados");
+                        break;
                     }
-                    break;
                 }
                 else if (choice == 2){
                     break;
@@ -729,12 +748,12 @@ private ArrayList<Alocacao> alocacoes;
             System.out.println("Adição feita com sucesso");
         }
         else{
-            System.out.println("Horários inválidos");
+            throw new Exception("Horários inválidos");
         }
     }
 
 
-    public void RemovePalestra(Scanner sc){
+    public void RemovePalestra(Scanner sc) throws Exception{
         if(!palestras.isEmpty()){
             for(Palestra palestra : palestras){
                 System.out.println("\n\nNúmero: " + palestras.indexOf(palestra));
@@ -754,7 +773,7 @@ private ArrayList<Alocacao> alocacoes;
                     System.out.println("Local da palestra: ");
                     System.out.println(alocacao.getLocal().getNome());
                 }
-
+                System.out.println("\n\n");
             }
             while (true){
                 Integer index_palestra = getInteger(sc, "Insira o Número da palestra a ser removida ou -1 para cancelar operação: ");
@@ -775,12 +794,12 @@ private ArrayList<Alocacao> alocacoes;
             }
         }
         else{
-            System.out.println("Nenhuma palestra cadastrada");
+            throw new Exception("Nenhuma palestra cadastrada");
         }
     }
 
 
-    public void EditPalestra(Scanner sc){
+    public void EditPalestra(Scanner sc) throws Exception{
         if(!palestras.isEmpty()){
             for(Palestra palestra : palestras){
                 System.out.println("\n\nNúmero: " + palestras.indexOf(palestra));
@@ -807,12 +826,10 @@ private ArrayList<Alocacao> alocacoes;
                     Palestra palestra = palestras.get(index_palestra);
                     Palestra palestra_de_busca = new Palestra(palestra.getNome(), palestra.getDescricao(), palestra.getInicio(), palestra.getFim(), palestra.getVagas(), palestra.isEmiteCertificado());
 
-                    //Caso eu crie um objeto a partir de outro objeto e eu altero os atributos dele, o objeto criado também é alterado ??
-
                     String tmp_data = getString(sc, "Insira a data(yyyy-MM-dd): ");
                     //HH:mm
-                    String hora_inicio = getString(sc, "Insira a hora de início: ");
-                    String hora_fim = getString(sc, "Insira a hora de finalização: ");
+                    String hora_inicio = getString(sc, "Insira a hora de início(HH:mm): ");
+                    String hora_fim = getString(sc, "Insira a hora de finalização(HH:mm): ");
                     //yyyy-MM-ddTHH:mm
                     String tmp_LocalDateTime = tmp_data+"T"+hora_inicio;
                     LocalDateTime inicio = LocalDateTime.parse(tmp_LocalDateTime);
@@ -940,9 +957,10 @@ private ArrayList<Alocacao> alocacoes;
                     else{
                         System.out.println("Horários inválidos");
                     }
+                    return;
                 }
                 else if(index_palestra == -1){
-                    break;
+                    return;
                 }
                 else{
                     System.out.println("Valor inválido, insira novamente");
@@ -950,7 +968,7 @@ private ArrayList<Alocacao> alocacoes;
             }
         }
         else{
-            System.out.println("Nenhuma palestra cadastrada");
+            throw new Exception("Nenhuma palestra cadastrada");
         }
     }
 
@@ -960,7 +978,7 @@ private ArrayList<Alocacao> alocacoes;
 
 
 
-    public ArrayList<Inscricao> lista_presenca(Scanner sc){
+    public void lista_presenca(Scanner sc) throws Exception{
         if(!palestras.isEmpty()){
             for(Palestra palestra : palestras){
                 System.out.println("\n\nNúmero: " + palestras.indexOf(palestra));
@@ -992,7 +1010,6 @@ private ArrayList<Alocacao> alocacoes;
                             System.out.println("Email: " + inscricao.getParticipante().getEmail());
                             System.out.println("Endereço: " + inscricao.getParticipante().getEndereco() + "\n\n");
                         }
-                        return tmp_inscricoes;
                     }
                     else{
                         System.out.println("Essa palestra nao possui inscricoes");
@@ -1007,12 +1024,11 @@ private ArrayList<Alocacao> alocacoes;
             }
         }
         else{
-            System.out.println("Nenhuma palestra cadastrada");
+            throw new Exception("Nenhuma palestra cadastrada");
         }
-        return null;
     }
 
-    public void lista_local_e_palestras(){
+    public void lista_local_e_palestras() throws Exception{
         if(!locais.isEmpty()){
             for(Local local : locais){
                 System.out.println("\n\nNúmero: " + locais.indexOf(local));
@@ -1045,11 +1061,11 @@ private ArrayList<Alocacao> alocacoes;
             }
         }
         else{
-            System.out.println("Nenhum local cadastrado");
+            throw new Exception("Nenhum local cadastrado");
         }
     }
 
-    public void palestras_de_participante(Scanner sc){
+    public void palestras_de_participante(Scanner sc) throws Exception{
         if(!participantes.isEmpty()){
             for(Participante participante : participantes){
                 System.out.println("\n\nNúmero: " + participantes.indexOf(participante));
@@ -1096,6 +1112,9 @@ private ArrayList<Alocacao> alocacoes;
                     System.out.println("Valor inválido");
                 }
             }
+        }
+        else{
+            throw new Exception("Nenhum participante cadastrado");
         }
     }
 
