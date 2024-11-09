@@ -376,6 +376,9 @@ public class Sistema {
                                     System.out.println("Esse participante ja esta inscrito nessa palestra");
                                 }
                             }
+                            else{
+                                System.out.println("A palestra não possui mais vagas");
+                            }
                             return;
                         } else if (index_palestra == -1) {
                             break;
@@ -416,7 +419,8 @@ public class Sistema {
                             .collect(Collectors.toCollection(ArrayList::new));
                     if (!tmp_inscricoes.isEmpty()) {
                         for (Inscricao inscricao : tmp_inscricoes) {
-                            System.out.println("\n\nNome: " + inscricao.getPalestra().getNome());
+                            System.out.println("\n\nNúmero: " + inscricoes.indexOf(inscricao));
+                            System.out.println("Nome: " + inscricao.getPalestra().getNome());
                             System.out.println("Descrição: " + inscricao.getPalestra().getDescricao());
                             System.out.println("Capacidade de vagas: " + inscricao.getPalestra().getVagas());
                             System.out.println("Início: " + inscricao.getPalestra().getInicio());
@@ -436,23 +440,31 @@ public class Sistema {
                                 System.out.println("Local da palestra: ");
                                 System.out.println(alocacao.getLocal().getNome());
                             }
+                            System.out.println("\n\n");
                         }
+                        while(true){
+                            Integer index_inscricao = getInteger(sc, "Insira o número da inscrição a ser removida ou -1 para cancelar a operação: ");
+                            if(index_inscricao >= 0 && index_inscricao < tmp_inscricoes.size()){
+                                Inscricao inscricao = inscricoes.get(index_inscricao);
+                                inscricoes.remove(inscricao);
+                                System.out.println("Remoção feita com sucesso");
+                                break;
+                            }
+                            else if(index_inscricao == -1){
+                                break;
+                            }
+                            else{
+                                System.out.println("Valor inválido");
 
-                        int index_inscricao = sc.nextInt();
-                        sc.nextLine();
-                        inscricoes.remove(index_inscricao);
-                        Inscricao inscricao = inscricoes.get(index_inscricao);
-                        if (inscricao != null) {
-                            inscricoes.remove(inscricao);
-                            System.out.println("Remocao feita com sucesso");
-                        } else {
-                            System.out.println("Valor inválido");
+                            }
                         }
+                        break;
                     } else {
                         System.out.println("Esse participante nao possui inscricoes");
+                        break;
                     }
                 } else if (index_participante == -1) {
-                    return;
+                    break;
                 } else {
                     System.out.println("Valor inválido");
                 }
@@ -460,7 +472,7 @@ public class Sistema {
         } else if (participantes.isEmpty()) {
             throw new Exception("Nenhum participante cadastrado");
         } else {
-            throw new Exception("Nenhuma palestra cadastrada");
+            throw new Exception("Nenhuma inscrição cadastrada");
         }
     }
 
