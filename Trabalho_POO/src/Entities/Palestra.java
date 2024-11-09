@@ -1,7 +1,6 @@
 package Entities;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 public class Palestra {
     private String Nome;
