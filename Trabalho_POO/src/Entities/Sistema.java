@@ -99,7 +99,7 @@ public class Sistema {
             String Endereco = getString(sc, "Insira o seu Endereço: ");
             ArrayList<String> Telefone = new ArrayList<>();
             while (true) {
-                String tmp = getString(sc, ("Insira o " + Telefone.size() + 1 + "º Telefone: "));
+                String tmp = getString(sc, ("Insira o " + (Telefone.size() + 1) + "º Telefone: "));
                 Telefone.add(tmp);
                 Integer stop;
                 while (true) {
@@ -181,7 +181,7 @@ public class Sistema {
                         String Endereco = getString(sc, "Insira o seu Endereço: ");
                         ArrayList<String> Telefone = new ArrayList<>();
                         while (true) {
-                            String tmp_telefone = getString(sc, ("Insira o " + Telefone.size() + 1 + "º Telefone: "));
+                            String tmp_telefone = getString(sc, ("Insira o " + (Telefone.size() + 1) + "º Telefone: "));
                             Telefone.add(tmp_telefone);
                             Integer stop;
                             while (true) {
@@ -226,7 +226,7 @@ public class Sistema {
             String Especialidade = getString(sc, "Insira a especialidade do palestrante: ");
             ArrayList<String> Telefone = new ArrayList<>();
             while (true) {
-                String tmp = getString(sc, ("Insira o " + Telefone.size() + 1 + "º Telefone: "));
+                String tmp = getString(sc, ("Insira o " + (Telefone.size() + 1) + "º Telefone: "));
                 Telefone.add(tmp);
                 Integer stop;
                 while (true) {
@@ -307,7 +307,7 @@ public class Sistema {
                         String Especialidade = getString(sc, "Insira a especialidade do palestrante: ");
                         ArrayList<String> Telefone = new ArrayList<>();
                         while (true) {
-                            String tmp_telefone = getString(sc, ("Insira o " + Telefone.size() + 1 + "º Telefone: "));
+                            String tmp_telefone = getString(sc, ("Insira o " + (Telefone.size() + 1) + "º Telefone: "));
                             Telefone.add(tmp_telefone);
                             Integer stop;
                             while (true) {
@@ -492,7 +492,7 @@ public class Sistema {
             if (Capacidade > 0) {
                 ArrayList<String> Recursos = new ArrayList<>();
                 while (true) {
-                    String tmp_recurso = getString(sc, ("Insira o " + Recursos.size() + 1 + "º Recurso: "));
+                    String tmp_recurso = getString(sc, ("Insira o " + (Recursos.size() + 1) + "º Recurso: "));
                     Recursos.add(tmp_recurso);
                     Integer stop;
                     while (true) {
@@ -579,7 +579,7 @@ public class Sistema {
                             .collect(Collectors.toCollection(ArrayList::new)).isEmpty() || tmp.getNome().equals(Nome)) {
                         ArrayList<String> Recursos = new ArrayList<>();
                         while (true) {
-                            String tmp_recurso = getString(sc, ("Insira o " + Recursos.size() + 1 + "º Recurso: "));
+                            String tmp_recurso = getString(sc, ("Insira o " + (Recursos.size() + 1) + "º Recurso: "));
                             Recursos.add(tmp_recurso);
                             Integer stop;
                             while (true) {
@@ -846,7 +846,7 @@ public class Sistema {
                     Palestra palestra = palestras.get(index_palestra);
                     Palestra palestra_de_busca = new Palestra(palestra.getNome(), palestra.getDescricao(),
                             palestra.getInicio(), palestra.getFim(), palestra.getVagas(),
-                            palestra.isEmiteCertificado());
+                            palestra.getEmiteCertificado());
 
                     String tmp_data = getString(sc, "Insira a data(yyyy-MM-dd): ");
                     // HH:mm
@@ -1162,6 +1162,75 @@ public class Sistema {
             throw new Exception("Nenhum participante cadastrado");
         }
     }
+
+
+    public ArrayList<Certificado> EmitirCertificados(Scanner sc) throws Exception{
+        ArrayList<Palestra> palestras_com_certificados = palestras.stream().filter(a -> a.getEmiteCertificado()).collect(Collectors.toCollection(ArrayList::new));
+        if (!palestras_com_certificados.isEmpty()) {
+            System.out.println("Palestras: ");
+            for (Palestra palestra : palestras_com_certificados) {
+                System.out.println("\nNúmero: " + palestras_com_certificados.indexOf(palestra));
+                System.out.println("Nome: " + palestra.getNome());
+                System.out.println("Descrição: " + palestra.getDescricao());
+                System.out.println("Capacidade de vagas: " + palestra.getVagas());
+                System.out.println("Início: " + palestra.getInicio());
+                System.out.println("Fim: " + palestra.getFim());
+                Apresentacao apresentacao = apresentacoes.stream().filter(a -> a.getPalestra().equals(palestra))
+                        .findAny().orElse(null);
+                if (apresentacao != null) {
+                    System.out.println("Palestrante responsável: ");
+                    System.out.println("Nome: " + apresentacao.getPalestrante().getNome());
+                    System.out.println("Email: " + apresentacao.getPalestrante().getEmail());
+                }
+                Alocacao alocacao = alocacoes.stream().filter(a -> a.getPalestra().equals(palestra)).findAny()
+                        .orElse(null);
+                if (alocacao != null) {
+                    System.out.println("Local da palestra: ");
+                    System.out.println(alocacao.getLocal().getNome());
+                }
+                System.out.println("\n");
+            }
+            while (true) {
+                Integer index_palestra = getInteger(sc,
+                        "Emitir certificados de qual palestra ?(-1 para cancelar operação): ");
+                if (index_palestra >= 0 && index_palestra < palestras_com_certificados.size()) {
+                    ArrayList<Inscricao> tmp_inscricoes = inscricoes.stream()
+                            .filter(a -> a.getPalestra().equals(palestras_com_certificados.get(index_palestra)))
+                            .collect(Collectors.toCollection(ArrayList::new));
+                    if (!tmp_inscricoes.isEmpty()) {
+                        String Descricao = getString(sc, "Insira a descrição do certificado");
+                        ArrayList<Certificado> certificados = new ArrayList<>();
+                        System.out.println("Certificados: : ");
+                        for (Inscricao inscricao : tmp_inscricoes) {
+                            certificados.add(new Certificado(inscricao.getPalestra(), inscricao.getParticipante(), Descricao));
+                            System.out.println("\nParticipante: ");
+                            System.out.println("Nome: " + inscricao.getParticipante().getNome());
+                            System.out.println("Email: " + inscricao.getParticipante().getEmail());
+                            System.out.println("Endereço: " + inscricao.getParticipante().getEndereco());
+                            System.out.println("Palestra concluída:");
+                            System.out.println("Nome: " + inscricao.getPalestra().getNome());
+                            System.out.println("Descrição: " + inscricao.getPalestra().getDescricao());
+                            System.out.println("Início: " + inscricao.getPalestra().getInicio());
+                            System.out.println("Fim: " + inscricao.getPalestra().getFim());
+                            System.out.println("Descrição do certificado: " + Descricao);
+                        }
+                        System.out.println("\nEmissão feita com sucesso\n");
+                        return certificados;
+                    } else {
+                        System.out.println("Essa palestra nao possui inscrições");
+                    }
+                } else if (index_palestra == -1) {
+                    break;
+                } else {
+                    System.out.println("Valor inválido");
+                }
+            }
+        } else {
+            throw new Exception("Nenhuma palestra com possível emissão de certificado");
+        }
+        return null;
+    }
+
 
     public String getString(Scanner sc, String txt) {
         while (true) {
