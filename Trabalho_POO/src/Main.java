@@ -8,7 +8,6 @@ public class Main {
         Sistema sistema = new Sistema();
 
         while (true) {
-            Integer choice = sistema.getInteger(sc, "Qual ação você deseja fazer ?: ");
             System.out.println("0 - Sair do programa");
             System.out.println("1 - Adicionar participante");
             System.out.println("2 - Remover participante");
@@ -33,6 +32,7 @@ public class Main {
             System.out.println("16 - Listar locais e suas palestras");
             System.out.println("17 - Listar palestras de um participante");
             try{
+                Integer choice = sistema.getInteger(sc, "Qual ação você deseja fazer ?: ");
                 if(choice == 0){
                     break;
                 }
