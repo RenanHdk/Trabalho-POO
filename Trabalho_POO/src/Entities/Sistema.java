@@ -120,7 +120,7 @@ public class Sistema {
             participante.setTelefone(Telefone);
 
             participantes.add(participante);
-            System.out.println("Adição feita com sucesso");
+            System.out.println("\nAdição feita com sucesso\n");
         } else {
             throw new Exception("Email já utilizado");
         }
@@ -128,12 +128,13 @@ public class Sistema {
 
     public void RemoveParticipante(Scanner sc) throws Exception {
         if (!participantes.isEmpty()) {
+            System.out.println("Participantes: ");
             for (Participante participante : participantes) {
-                System.out.println("\n\nNúmero: " + participantes.indexOf(participante));
+                System.out.println("\nNúmero: " + participantes.indexOf(participante));
                 System.out.println("Código do Participante: " + participante.getCodigo());
                 System.out.println("Nome: " + participante.getNome());
                 System.out.println("Email: " + participante.getEmail());
-                System.out.println("Endereço: " + participante.getEndereco() + "\n\n");
+                System.out.println("Endereço: " + participante.getEndereco() + "\n");
             }
             while (true) {
                 Integer index_participante = getInteger(sc,
@@ -142,10 +143,10 @@ public class Sistema {
                     Participante tmp = participantes.get(index_participante);
                     inscricoes.removeIf(a -> a.getParticipante().equals(tmp));
                     participantes.remove(tmp);
-                    System.out.println("Remoção feita com sucesso");
-                    return;
+                    System.out.println("\nRemoção feita com sucesso\n");
+                    break;
                 } else if (index_participante == -1) {
-                    return;
+                    break;
                 } else {
                     System.out.println("Valor inválido, insira novamente");
                 }
@@ -157,12 +158,13 @@ public class Sistema {
 
     public void EditParticipante(Scanner sc) throws Exception {
         if (!participantes.isEmpty()) {
+            System.out.println("Participantes: ");
             for (Participante participante : participantes) {
-                System.out.println("\n\nNúmero: " + participantes.indexOf(participante));
+                System.out.println("\nNúmero: " + participantes.indexOf(participante));
                 System.out.println("Código do Participante: " + participante.getCodigo());
                 System.out.println("Nome: " + participante.getNome());
                 System.out.println("Email: " + participante.getEmail());
-                System.out.println("Endereço: " + participante.getEndereco() + "\n\n");
+                System.out.println("Endereço: " + participante.getEndereco() + "\n");
             }
             while (true) {
                 Integer index_participante = getInteger(sc,
@@ -198,13 +200,13 @@ public class Sistema {
                         tmp.setNome(Nome);
                         tmp.setEndereco(Endereco);
                         tmp.setTelefone(Telefone);
-                        System.out.println("Edição feita com sucesso");
-                        return;
+                        System.out.println("\nEdição feita com sucesso\n");
+                        break;
                     } else {
                         throw new Exception("Email já utilizado");
                     }
                 } else if (index_participante == -1) {
-                    return;
+                    break;
                 } else {
                     System.out.println("Valor inválido, insira novamente");
                 }
@@ -243,7 +245,7 @@ public class Sistema {
             Palestrante palestrante = new Palestrante(Nome, Endereco, Email, Especialidade);
             palestrante.setTelefone(Telefone);
             palestrantes.add(palestrante);
-            System.out.println("Adicao feita com sucesso");
+            System.out.println("\nAdição feita com sucesso\n");
         } else {
             throw new Exception("Email já utilizado");
         }
@@ -251,12 +253,13 @@ public class Sistema {
 
     public void RemovePalestrante(Scanner sc) throws Exception {
         if (!palestrantes.isEmpty()) {
+            System.out.println("Palestrantes: ");
             for (Palestrante palestrante : palestrantes) {
-                System.out.println("\n\nNúmero: " + palestrantes.indexOf(palestrante));
+                System.out.println("\nNúmero: " + palestrantes.indexOf(palestrante));
                 System.out.println("Nome: " + palestrante.getNome());
                 System.out.println("Email: " + palestrante.getEmail());
                 System.out.println("Endereço: " + palestrante.getEndereco());
-                System.out.println("Especialidade: " + palestrante.getEspecialidade() + "\n\n");
+                System.out.println("Especialidade: " + palestrante.getEspecialidade() + "\n");
             }
             while (true) {
                 Integer index_palestrante = getInteger(sc,
@@ -265,10 +268,10 @@ public class Sistema {
                     Palestrante tmp = palestrantes.get(index_palestrante);
                     apresentacoes.removeIf(a -> a.getPalestrante().equals(tmp));
                     palestrantes.remove(tmp);
-                    System.out.println("Remoção feita com sucesso");
-                    return;
+                    System.out.println("\nRemoção feita com sucesso\n");
+                    break;
                 } else if (index_palestrante == -1) {
-                    return;
+                    break;
                 } else {
                     System.out.println("Valor inválido, insira novamente");
                 }
@@ -280,12 +283,13 @@ public class Sistema {
 
     public void EditPalestrante(Scanner sc) throws Exception {
         if (!palestrantes.isEmpty()) {
+            System.out.println("Palestrantes: ");
             for (Palestrante palestrante : palestrantes) {
-                System.out.println("\n\nNúmero: " + palestrantes.indexOf(palestrante));
+                System.out.println("\nNúmero: " + palestrantes.indexOf(palestrante));
                 System.out.println("Nome: " + palestrante.getNome());
                 System.out.println("Email: " + palestrante.getEmail());
                 System.out.println("Endereço: " + palestrante.getEndereco());
-                System.out.println("Especialidade: " + palestrante.getEspecialidade() + "\n\n");
+                System.out.println("Especialidade: " + palestrante.getEspecialidade() + "\n");
             }
             while (true) {
                 Integer index_palestrante = getInteger(sc,
@@ -323,13 +327,13 @@ public class Sistema {
                         tmp.setEndereco(Endereco);
                         tmp.setEspecialidade(Especialidade);
                         tmp.setTelefone(Telefone);
-                        System.out.println("Edição feita com sucesso");
-                        return;
+                        System.out.println("\nEdição feita com sucesso\n");
+                        break;
                     } else {
                         throw new Exception("Email inválido");
                     }
                 } else if (index_palestrante == -1) {
-                    return;
+                    break;
                 } else {
                     System.out.println("Valor inválido, insira novamente");
                 }
@@ -341,12 +345,13 @@ public class Sistema {
 
     public void Inscricao(Scanner sc) throws Exception {
         if (!participantes.isEmpty() && !palestras.isEmpty()) {
+            System.out.println("Participantes: ");
             for (Participante participante : participantes) {
-                System.out.println("\n\nNúmero: " + participantes.indexOf(participante));
+                System.out.println("\nNúmero: " + participantes.indexOf(participante));
                 System.out.println("Código do Participante: " + participante.getCodigo());
                 System.out.println("Nome: " + participante.getNome());
                 System.out.println("Email: " + participante.getEmail());
-                System.out.println("Endereço: " + participante.getEndereco() + "\n\n");
+                System.out.println("Endereço: " + participante.getEndereco() + "\n");
             }
             while (true) {
                 Integer index_participante = getInteger(sc,
@@ -354,12 +359,13 @@ public class Sistema {
                 if (index_participante >= 0 && index_participante < participantes.size()) {
                     Participante participante = participantes.get(index_participante);
                     for (Palestra palestra : palestras) {
-                        System.out.println("\n\nNúmero: " + palestras.indexOf(palestra));
+                        System.out.println("Palestras: ");
+                        System.out.println("\nNúmero: " + palestras.indexOf(palestra));
                         System.out.println("Nome: " + palestra.getNome());
                         System.out.println("Quantidade de Vagas" + palestra.getVagas());
                         System.out.println("Início: " + palestra.getInicio());
                         System.out.println("Fim: " + palestra.getFim());
-                        System.out.println("Descrição: " + palestra.getDescricao() + "\n\n");
+                        System.out.println("Descrição: " + palestra.getDescricao() + "\n");
                     }
                     while (true) {
                         Integer index_palestra = getInteger(sc,
@@ -371,7 +377,7 @@ public class Sistema {
                                 Inscricao inscricao = new Inscricao(participante, palestra);
                                 if (inscricoes.stream().filter(a -> a.getPalestra().equals(palestra) && a.getParticipante().equals(participante)).collect(Collectors.toCollection(ArrayList::new)).isEmpty()) {
                                     inscricoes.add(inscricao);
-                                    System.out.println("Inscricao feita com sucesso");
+                                    System.out.println("\nInscrição feita com sucesso\n");
                                 } else {
                                     System.out.println("Esse participante ja esta inscrito nessa palestra");
                                 }
@@ -402,12 +408,13 @@ public class Sistema {
 
     public void RemoverInscricao(Scanner sc) throws Exception {
         if (!participantes.isEmpty() && !inscricoes.isEmpty()) {
+            System.out.println("Participantes: ");
             for (Participante participante : participantes) {
-                System.out.println("\n\nNúmero: " + participantes.indexOf(participante));
+                System.out.println("\nNúmero: " + participantes.indexOf(participante));
                 System.out.println("Código do Participante: " + participante.getCodigo());
                 System.out.println("Nome: " + participante.getNome());
                 System.out.println("Email: " + participante.getEmail());
-                System.out.println("Endereço: " + participante.getEndereco() + "\n\n");
+                System.out.println("Endereço: " + participante.getEndereco() + "\n");
             }
             while (true) {
                 Integer index_participante = getInteger(sc,
@@ -419,7 +426,8 @@ public class Sistema {
                             .collect(Collectors.toCollection(ArrayList::new));
                     if (!tmp_inscricoes.isEmpty()) {
                         for (Inscricao inscricao : tmp_inscricoes) {
-                            System.out.println("\n\nNúmero: " + inscricoes.indexOf(inscricao));
+                            System.out.println("Inscrições: ");
+                            System.out.println("\nNúmero: " + inscricoes.indexOf(inscricao));
                             System.out.println("Nome: " + inscricao.getPalestra().getNome());
                             System.out.println("Descrição: " + inscricao.getPalestra().getDescricao());
                             System.out.println("Capacidade de vagas: " + inscricao.getPalestra().getVagas());
@@ -440,14 +448,14 @@ public class Sistema {
                                 System.out.println("Local da palestra: ");
                                 System.out.println(alocacao.getLocal().getNome());
                             }
-                            System.out.println("\n\n");
+                            System.out.println("\n");
                         }
                         while(true){
                             Integer index_inscricao = getInteger(sc, "Insira o número da inscrição a ser removida ou -1 para cancelar a operação: ");
                             if(index_inscricao >= 0 && index_inscricao < tmp_inscricoes.size()){
                                 Inscricao inscricao = inscricoes.get(index_inscricao);
                                 inscricoes.remove(inscricao);
-                                System.out.println("Remoção feita com sucesso");
+                                System.out.println("\nRemoção feita com sucesso\n");
                                 break;
                             }
                             else if(index_inscricao == -1){
@@ -502,7 +510,7 @@ public class Sistema {
                 Local local = new Local(Nome, Capacidade);
                 local.setRecursos(Recursos);
                 locais.add(local);
-                System.out.println("Local adicionado com sucesso");
+                System.out.println("\nAdição feita com sucesso com sucesso\n");
             } else {
                 throw new Exception("Valor inválido");
             }
@@ -513,8 +521,9 @@ public class Sistema {
 
     public void RemoveLocal(Scanner sc) throws Exception {
         if (!locais.isEmpty()) {
+            System.out.println("Locais: ");
             for (Local local : locais) {
-                System.out.println("\n\nNúmero: " + locais.indexOf(local));
+                System.out.println("\nNúmero: " + locais.indexOf(local));
                 System.out.println("Nome: " + local.getNome());
                 System.out.println("Capacidade: " + local.getCapacidade());
                 if (!local.getRecursos().isEmpty()) {
@@ -523,7 +532,7 @@ public class Sistema {
                         System.out.println(obj);
                     }
                 }
-                System.out.println("\n\n");
+                System.out.println("\n");
             }
             while (true) {
                 Integer index_local = getInteger(sc,
@@ -532,7 +541,7 @@ public class Sistema {
                     Local tmp = locais.get(index_local);
                     alocacoes.removeIf(a -> a.getLocal().equals(tmp));
                     locais.remove(tmp);
-                    System.out.println("Remoção feita com sucesso");
+                    System.out.println("\nRemoção feita com sucesso\n");
                     return;
                 } else if (index_local == -1) {
                     return;
@@ -547,8 +556,9 @@ public class Sistema {
 
     public void EditLocal(Scanner sc) throws Exception {
         if (!locais.isEmpty()) {
+            System.out.println("Locais: ");
             for (Local local : locais) {
-                System.out.println("\n\nNúmero: " + locais.indexOf(local));
+                System.out.println("\nNúmero: " + locais.indexOf(local));
                 System.out.println("Nome: " + local.getNome());
                 System.out.println("Capacidade: " + local.getCapacidade());
                 if (!local.getRecursos().isEmpty()) {
@@ -557,7 +567,7 @@ public class Sistema {
                         System.out.println(obj);
                     }
                 }
-                System.out.println("\n\n");
+                System.out.println("\n");
             }
             while (true) {
                 Integer index_local = getInteger(sc,
@@ -586,7 +596,7 @@ public class Sistema {
                         }
                         tmp.setNome(Nome);
                         tmp.setRecursos(Recursos);
-                        System.out.println("Edição feita com sucesso");
+                        System.out.println("\nEdição feita com sucesso\n");
                         return;
                     } else {
                         throw new Exception("Nome inválido");
@@ -634,8 +644,9 @@ public class Sistema {
                         if (choice == 1) {
                             ArrayList<Local> tmp_Locais = locais.stream().filter(a -> a.getCapacidade()>=vagas).collect(Collectors.toCollection(ArrayList::new));
                             if (!tmp_Locais.isEmpty()) {
+                                System.out.println("Locais: ");
                                 for (Local local : tmp_Locais) {
-                                    System.out.println("\n\nNúmero: " + tmp_Locais.indexOf(local));
+                                    System.out.println("\nNúmero: " + tmp_Locais.indexOf(local));
                                     System.out.println("Nome: " + local.getNome());
                                     System.out.println("Capacidade: " + local.getCapacidade());
                                     if (!local.getRecursos().isEmpty()) {
@@ -645,7 +656,7 @@ public class Sistema {
                                         }
                                     }
                                     ArrayList<Alocacao> tmp_alocacoes = alocacoes.stream().filter(
-                                            a -> a.getLocal().equals(local) || a.getLocal().getCapacidade() >= vagas)
+                                                    a -> a.getLocal().equals(local) || a.getLocal().getCapacidade() >= vagas)
                                             .collect(Collectors.toCollection(ArrayList::new));
                                     if (!tmp_alocacoes.isEmpty()) {
                                         System.out.println("Palestras do local: ");
@@ -658,7 +669,7 @@ public class Sistema {
                                     } else {
                                         System.out.println("Esse local não possui eventos");
                                     }
-                                    System.out.println("\n\n");
+                                    System.out.println("\n");
                                 }
                                 while (true) {
                                     Integer index_local = getInteger(sc,
@@ -672,15 +683,15 @@ public class Sistema {
                                                 .filter(a -> (a.getPalestra().getInicio().isBefore(inicio)
                                                         && a.getPalestra().getFim().isAfter(inicio))
                                                         || (a.getPalestra().getInicio().isBefore(fim)
-                                                                && a.getPalestra().getFim().isAfter(fim))
+                                                        && a.getPalestra().getFim().isAfter(fim))
                                                         || (inicio.isBefore(a.getPalestra().getInicio())
-                                                                && fim.isAfter(a.getPalestra().getInicio()))
+                                                        && fim.isAfter(a.getPalestra().getInicio()))
                                                         || (inicio.isBefore(a.getPalestra().getFim())
-                                                                && fim.isAfter(a.getPalestra().getFim())))
+                                                        && fim.isAfter(a.getPalestra().getFim())))
                                                 .collect(Collectors.toCollection(ArrayList::new)).isEmpty()) {
                                             Alocacao alocacao = new Alocacao(local, palestra);
                                             alocacoes.add(alocacao);
-                                            System.out.println("Relação criada com sucesso");
+                                            System.out.println("\nRelação criada com sucesso\n");
                                             break;
                                         } else {
                                             System.out.println("Conflito com horários");
@@ -708,12 +719,13 @@ public class Sistema {
                         choice = getInteger(sc, "Adicionar palestrante a palestra ?(1 - Sim, 2 - Não): ");
                         if (choice == 1) {
                             if (!palestrantes.isEmpty()) {
+                                System.out.println("Palestrantes: ");
                                 for (Palestrante palestrante : palestrantes) {
-                                    System.out.println("\n\nNúmero: " + palestrantes.indexOf(palestrante));
+                                    System.out.println("\nNúmero: " + palestrantes.indexOf(palestrante));
                                     System.out.println("Nome: " + palestrante.getNome());
                                     System.out.println("Email: " + palestrante.getEmail());
                                     System.out.println("Endereço: " + palestrante.getEndereco());
-                                    System.out.println("Especialidade: " + palestrante.getEspecialidade() + "\n\n");
+                                    System.out.println("Especialidade: " + palestrante.getEspecialidade() + "\n");
                                 }
                                 while (true) {
                                     Integer index_palestrante = getInteger(sc,
@@ -722,7 +734,7 @@ public class Sistema {
                                         Palestrante palestrante = palestrantes.get(index_palestrante);
                                         Apresentacao apresentacao = new Apresentacao(palestrante, palestra);
                                         apresentacoes.add(apresentacao);
-                                        System.out.println("Relação criada com sucesso");
+                                        System.out.println("\nRelação criada com sucesso\n");
                                         break;
                                     } else if (index_palestrante == -1) {
                                         break;
@@ -742,10 +754,7 @@ public class Sistema {
                             System.out.println("Valor inválido");
                         }
                     }
-
-
-
-                    System.out.println("Adição feita com sucesso");
+                    System.out.println("\nAdição feita com sucesso\n");
                     return;
                 } else {
                     throw new Exception("Valor inválidos");
@@ -760,8 +769,9 @@ public class Sistema {
 
     public void RemovePalestra(Scanner sc) throws Exception {
         if (!palestras.isEmpty()) {
+            System.out.println("Palestras: ");
             for (Palestra palestra : palestras) {
-                System.out.println("\n\nNúmero: " + palestras.indexOf(palestra));
+                System.out.println("\nNúmero: " + palestras.indexOf(palestra));
                 System.out.println("Nome: " + palestra.getNome());
                 System.out.println("Descrição: " + palestra.getDescricao());
                 System.out.println("Capacidade de vagas: " + palestra.getVagas());
@@ -780,7 +790,7 @@ public class Sistema {
                     System.out.println("Local da palestra: ");
                     System.out.println(alocacao.getLocal().getNome());
                 }
-                System.out.println("\n\n");
+                System.out.println("\n");
             }
             while (true) {
                 Integer index_palestra = getInteger(sc,
@@ -791,7 +801,7 @@ public class Sistema {
                     alocacoes.removeIf(a -> a.getPalestra().equals(palestra));
                     inscricoes.removeIf(a -> a.getPalestra().equals(palestra));
                     palestras.remove(palestra);
-                    System.out.println("Remoção feita com sucesso");
+                    System.out.println("\nRemoção feita com sucesso\n");
                     return;
                 } else if (index_palestra == -1) {
                     return;
@@ -806,8 +816,9 @@ public class Sistema {
 
     public void EditPalestra(Scanner sc) throws Exception {
         if (!palestras.isEmpty()) {
+            System.out.println("Palestras: ");
             for (Palestra palestra : palestras) {
-                System.out.println("\n\nNúmero: " + palestras.indexOf(palestra));
+                System.out.println("\nNúmero: " + palestras.indexOf(palestra));
                 System.out.println("Nome: " + palestra.getNome());
                 System.out.println("Descrição: " + palestra.getDescricao());
                 System.out.println("Capacidade de vagas: " + palestra.getVagas());
@@ -826,7 +837,7 @@ public class Sistema {
                     System.out.println("Local da palestra: ");
                     System.out.println(alocacao.getLocal().getNome());
                 }
-                System.out.println("\n\n");
+                System.out.println("\n");
             }
             while (true) {
                 Integer index_palestra = getInteger(sc,
@@ -868,8 +879,9 @@ public class Sistema {
                                 if (choice == 1) {
                                     ArrayList<Local> tmp_Locais = locais.stream().filter(a -> a.getCapacidade()>=palestra.getVagas()).collect(Collectors.toCollection(ArrayList::new));
                                     if (!tmp_Locais.isEmpty()) {
+                                        System.out.println("Locais: ");
                                         for (Local local : tmp_Locais) {
-                                            System.out.println("\n\nNúmero: " + locais.indexOf(local));
+                                            System.out.println("\nNúmero: " + locais.indexOf(local));
                                             System.out.println("Nome: " + local.getNome());
                                             System.out.println("Capacidade: " + local.getCapacidade());
                                             if (!local.getRecursos().isEmpty()) {
@@ -895,7 +907,7 @@ public class Sistema {
                                             } else {
                                                 System.out.println("Esse local não possui eventos");
                                             }
-                                            System.out.println("\n\n");
+                                            System.out.println("\n");
                                         }
                                         while (true) {
                                             Integer index_local = getInteger(sc,
@@ -909,16 +921,16 @@ public class Sistema {
                                                         .filter(a -> (a.getPalestra().getInicio().isBefore(inicio)
                                                                 && a.getPalestra().getFim().isAfter(inicio))
                                                                 || (a.getPalestra().getInicio().isBefore(fim)
-                                                                        && a.getPalestra().getFim().isAfter(fim))
+                                                                && a.getPalestra().getFim().isAfter(fim))
                                                                 || (inicio.isBefore(a.getPalestra().getInicio())
-                                                                        && fim.isAfter(a.getPalestra().getInicio()))
+                                                                && fim.isAfter(a.getPalestra().getInicio()))
                                                                 || (inicio.isBefore(a.getPalestra().getFim())
-                                                                        && fim.isAfter(a.getPalestra().getFim())))
+                                                                && fim.isAfter(a.getPalestra().getFim())))
                                                         .collect(Collectors.toCollection(ArrayList::new)).isEmpty()) {
                                                     alocacoes.removeIf(a -> a.getPalestra().equals(palestra_de_busca));
                                                     Alocacao alocacao = new Alocacao(local, palestra);
                                                     alocacoes.add(alocacao);
-                                                    System.out.println("Relação alterada com sucesso");
+                                                    System.out.println("\nRelação alterada com sucesso\n");
                                                     break;
                                                 } else {
                                                     System.out.println("Conflito com horários");
@@ -946,13 +958,14 @@ public class Sistema {
                                 choice = getInteger(sc, "Alterar palestrante da palestra ?(1 - Sim, 2 - Não): ");
                                 if (choice == 1) {
                                     if (!palestrantes.isEmpty()) {
+                                        System.out.println("Palestrantes: ");
                                         for (Palestrante palestrante : palestrantes) {
-                                            System.out.println("\n\nNúmero: " + palestrantes.indexOf(palestrante));
+                                            System.out.println("\nNúmero: " + palestrantes.indexOf(palestrante));
                                             System.out.println("Nome: " + palestrante.getNome());
                                             System.out.println("Email: " + palestrante.getEmail());
                                             System.out.println("Endereço: " + palestrante.getEndereco());
                                             System.out.println(
-                                                    "Especialidade: " + palestrante.getEspecialidade() + "\n\n");
+                                                    "Especialidade: " + palestrante.getEspecialidade() + "\n");
                                         }
                                         while (true) {
                                             Integer index_palestrante = getInteger(sc,
@@ -962,7 +975,7 @@ public class Sistema {
                                                 apresentacoes.removeIf(a -> a.getPalestra().equals(palestra_de_busca));
                                                 Apresentacao apresentacao = new Apresentacao(palestrante, palestra);
                                                 apresentacoes.add(apresentacao);
-                                                System.out.println("Relação alterada com sucesso");
+                                                System.out.println("\nRelação alterada com sucesso\n");
                                                 break;
                                             } else if (index_palestrante == -1) {
                                                 break;
@@ -981,10 +994,10 @@ public class Sistema {
                                     System.out.println("Valor inválido");
                                 }
                             }
-                            System.out.println("Edição feita com sucesso");
+                            System.out.println("\nEdição feita com sucesso\n");
                             return;
                         } else {
-                            throw new Exception("Valor inválidos");
+                            throw new Exception("Valor inválido");
                         }
                     } else {
                         throw new Exception("Horários inválidos");
@@ -1002,8 +1015,9 @@ public class Sistema {
 
     public void lista_presenca(Scanner sc) throws Exception {
         if (!palestras.isEmpty()) {
+            System.out.println("Palestras: ");
             for (Palestra palestra : palestras) {
-                System.out.println("\n\nNúmero: " + palestras.indexOf(palestra));
+                System.out.println("\nNúmero: " + palestras.indexOf(palestra));
                 System.out.println("Nome: " + palestra.getNome());
                 System.out.println("Descrição: " + palestra.getDescricao());
                 System.out.println("Capacidade de vagas: " + palestra.getVagas());
@@ -1022,7 +1036,7 @@ public class Sistema {
                     System.out.println("Local da palestra: ");
                     System.out.println(alocacao.getLocal().getNome());
                 }
-                System.out.println("\n\n");
+                System.out.println("\n");
             }
             while (true) {
                 Integer index_palestra = getInteger(sc,
@@ -1032,20 +1046,21 @@ public class Sistema {
                             .filter(a -> a.getPalestra().equals(palestras.get(index_palestra)))
                             .collect(Collectors.toCollection(ArrayList::new));
                     if (!tmp_inscricoes.isEmpty()) {
+                        System.out.println("Inscrições da palestra: ");
                         for (Inscricao inscricao : tmp_inscricoes) {
                             System.out
-                                    .println("\n\nCódigo do Participante: " + inscricao.getParticipante().getCodigo());
+                                    .println("\nCódigo do Participante: " + inscricao.getParticipante().getCodigo());
                             System.out.println("Nome: " + inscricao.getParticipante().getNome());
                             System.out.println("Email: " + inscricao.getParticipante().getEmail());
-                            System.out.println("Endereço: " + inscricao.getParticipante().getEndereco() + "\n\n");
+                            System.out.println("Endereço: " + inscricao.getParticipante().getEndereco() + "\n");
                         }
                     } else {
-                        System.out.println("Essa palestra nao possui inscricoes");
+                        System.out.println("Essa palestra nao possui inscrições");
                     }
                 } else if (index_palestra == -1) {
                     break;
                 } else {
-                    System.out.println("Valon inválido");
+                    System.out.println("Valor inválido");
                 }
             }
         } else {
@@ -1056,7 +1071,8 @@ public class Sistema {
     public void lista_local_e_palestras() throws Exception {
         if (!locais.isEmpty()) {
             for (Local local : locais) {
-                System.out.println("\n\nNúmero: " + locais.indexOf(local));
+                System.out.println("Local: ");
+                System.out.println("\nNúmero: " + locais.indexOf(local));
                 System.out.println("Nome: " + local.getNome());
                 System.out.println("Capacidade: " + local.getCapacidade());
                 if (!local.getRecursos().isEmpty()) {
@@ -1068,10 +1084,9 @@ public class Sistema {
                 ArrayList<Alocacao> tmp_alocacoes = alocacoes.stream().filter(a -> a.getLocal().equals(local))
                         .collect(Collectors.toCollection(ArrayList::new));
                 if (!tmp_alocacoes.isEmpty()) {
-                    System.out.println("Palestras do local: ");
-
+                    System.out.println("\nPalestras do local: ");
                     for (Alocacao alocacao : tmp_alocacoes) {
-                        System.out.println("\n\nNome: " + alocacao.getPalestra().getNome());
+                        System.out.println("Nome: " + alocacao.getPalestra().getNome());
                         System.out.println("Descrição: " + alocacao.getPalestra().getDescricao());
                         System.out.println("Capacidade de vagas: " + alocacao.getPalestra().getVagas());
                         System.out.println("Início: " + alocacao.getPalestra().getInicio());
@@ -1085,7 +1100,7 @@ public class Sistema {
                         }
                     }
                 }
-                System.out.println("\n\n");
+                System.out.println("\n");
             }
         } else {
             throw new Exception("Nenhum local cadastrado");
@@ -1094,12 +1109,13 @@ public class Sistema {
 
     public void palestras_de_participante(Scanner sc) throws Exception {
         if (!participantes.isEmpty()) {
+            System.out.println("Participantes: ");
             for (Participante participante : participantes) {
-                System.out.println("\n\nNúmero: " + participantes.indexOf(participante));
+                System.out.println("\nNúmero: " + participantes.indexOf(participante));
                 System.out.println("Código do Participante: " + participante.getCodigo());
                 System.out.println("Nome: " + participante.getNome());
                 System.out.println("Email: " + participante.getEmail());
-                System.out.println("Endereço: " + participante.getEndereco() + "\n\n");
+                System.out.println("Endereço: " + participante.getEndereco() + "\n");
             }
             while (true) {
                 Integer index_participante = getInteger(sc,
@@ -1109,8 +1125,9 @@ public class Sistema {
                             .filter(a -> a.getParticipante().equals(participantes.get(index_participante)))
                             .collect(Collectors.toCollection(ArrayList::new));
                     if (!tmp_inscricoes.isEmpty()) {
+                        System.out.println("Palestras: ");
                         for (Inscricao inscricao : tmp_inscricoes) {
-                            System.out.println("\n\nNome: " + inscricao.getPalestra().getNome());
+                            System.out.println("\nNome: " + inscricao.getPalestra().getNome());
                             System.out.println("Descrição: " + inscricao.getPalestra().getDescricao());
                             System.out.println("Capacidade de vagas: " + inscricao.getPalestra().getVagas());
                             System.out.println("Início: " + inscricao.getPalestra().getInicio());
@@ -1130,7 +1147,7 @@ public class Sistema {
                                 System.out.println("Local da palestra: ");
                                 System.out.println(alocacao.getLocal().getNome());
                             }
-                            System.out.println("\n\n");
+                            System.out.println("\n");
                         }
                     } else {
                         System.out.println("O participante nao possui inscrições");
