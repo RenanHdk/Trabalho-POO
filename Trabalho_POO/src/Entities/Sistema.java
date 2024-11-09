@@ -1212,7 +1212,11 @@ public class Sistema {
                             System.out.println("Descrição: " + inscricao.getPalestra().getDescricao());
                             System.out.println("Início: " + inscricao.getPalestra().getInicio());
                             System.out.println("Fim: " + inscricao.getPalestra().getFim());
-                            System.out.println("Descrição do certificado: " + Descricao);
+                            Apresentacao apresentacao = apresentacoes.stream().filter(a -> a.getPalestra().equals(inscricao.getPalestra())).findAny().orElse(null);
+                            if(apresentacao != null){
+                                System.out.println("Nome do palestrante: " + apresentacao.getPalestrante().getNome());
+                            }
+                            System.out.println("Descrição do certificado: " + Descricao + "\n");
                         }
                         System.out.println("\nEmissão feita com sucesso\n");
                         return certificados;
