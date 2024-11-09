@@ -33,6 +33,7 @@ public class Main {
             System.out.println("17 - Listar palestras de um participante");
             try{
                 Integer choice = sistema.getInteger(sc, "Qual ação você deseja fazer ?: ");
+                System.out.println("\n");
                 if(choice == 0){
                     break;
                 }
@@ -86,6 +87,9 @@ public class Main {
                 }
                 else if(choice == 17){
                     sistema.palestras_de_participante(sc);
+                }
+                else if(choice == 18){
+                    sistema.EmitirCertificados(sc);
                 }
                 else{
                     System.out.println("Valor inválido");
