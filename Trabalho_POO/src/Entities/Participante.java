@@ -1,7 +1,5 @@
 package Entities;
 
-import java.util.ArrayList;
-
 public class Participante extends Pessoa{
     private Integer Codigo;
 
