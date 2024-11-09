@@ -3,32 +3,22 @@ package Entities;
 import java.time.LocalDateTime;
 
 public class Certificado {
-    private LocalDateTime Data_De_Acontecimento;
-    private Palestrante Palestrante;
+    private Palestra palestra;
     private Participante Participante;
     private String Descricao;
 
-    public Certificado(LocalDateTime Data_De_Acontecimento, Palestrante Palestrante, Participante Participante, String Descricao) {
-        this.Data_De_Acontecimento = Data_De_Acontecimento;
-        this.Palestrante = Palestrante;
+    public Certificado(Palestra palestra, Participante Participante, String Descricao) {
+        this.palestra = palestra;
         this.Participante = Participante;
         this.Descricao = Descricao;
     }
 
-    public LocalDateTime getData_De_Acontecimento() {
-        return Data_De_Acontecimento;
+    public Palestra getPalestra() {
+        return palestra;
     }
 
-    public void setData_De_Acontecimento(LocalDateTime data_De_Acontecimento) {
-        Data_De_Acontecimento = data_De_Acontecimento;
-    }
-
-    public Palestrante getPalestrante() {
-        return Palestrante;
-    }
-
-    public void setPalestrante(Palestrante palestrante) {
-        Palestrante = palestrante;
+    public void setPalestra(Palestra palestra) {
+        this.palestra = palestra;
     }
 
     public Entities.Participante getParticipante() {
