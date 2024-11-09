@@ -359,7 +359,7 @@ public class Sistema {
                         System.out.println("Quantidade de Vagas" + palestra.getVagas());
                         System.out.println("Início: " + palestra.getInicio());
                         System.out.println("Fim: " + palestra.getFim());
-                        System.out.println("Descrição: " + palestra.getDescricao());
+                        System.out.println("Descrição: " + palestra.getDescricao() + "\n\n");
                     }
                     while (true) {
                         Integer index_palestra = getInteger(sc,
@@ -369,7 +369,7 @@ public class Sistema {
                             if (inscricoes.stream().filter(a -> a.getPalestra().equals(palestra))
                                     .collect(Collectors.toCollection(ArrayList::new)).size() < palestra.getVagas()) {
                                 Inscricao inscricao = new Inscricao(participante, palestra);
-                                if (!inscricoes.contains(inscricao)) {
+                                if (inscricoes.stream().filter(a -> a.getPalestra().equals(palestra) && a.getParticipante().equals(participante)).collect(Collectors.toCollection(ArrayList::new)).isEmpty()) {
                                     inscricoes.add(inscricao);
                                     System.out.println("Inscricao feita com sucesso");
                                 } else {
@@ -377,12 +377,13 @@ public class Sistema {
                                 }
                             }
                             return;
-                        } else if (index_participante == -1) {
-                            return;
+                        } else if (index_palestra == -1) {
+                            break;
                         } else {
                             System.out.println("Valor inválido, insira novamente");
                         }
                     }
+                    break;
                 } else if (index_participante == -1) {
                     return;
                 } else {
@@ -776,6 +777,7 @@ public class Sistema {
                     Palestra palestra = palestras.get(index_palestra);
                     apresentacoes.removeIf(a -> a.getPalestra().equals(palestra));
                     alocacoes.removeIf(a -> a.getPalestra().equals(palestra));
+                    inscricoes.removeIf(a -> a.getPalestra().equals(palestra));
                     palestras.remove(palestra);
                     System.out.println("Remoção feita com sucesso");
                     return;
@@ -834,8 +836,8 @@ public class Sistema {
                     LocalDateTime fim = LocalDateTime.parse(tmp_LocalDateTime);
                     if (inicio.isBefore((fim))) {
                         String Nome = getString(sc, "Insira o nome: ");
-                        String Descricao = getString(sc, "Insira a Descrição ");
-                        Integer tmp_boolean = getInteger(sc, "A palestra emite certificado ?(1 - Sim, 2 - Não)");
+                        String Descricao = getString(sc, "Insira a Descrição: ");
+                        Integer tmp_boolean = getInteger(sc, "A palestra emite certificado ?(1 - Sim, 2 - Não): ");
                         if (tmp_boolean == 1 || tmp_boolean == 2) {
                             boolean EmiteCertificado;
                             if (tmp_boolean == 1) {
@@ -904,6 +906,7 @@ public class Sistema {
                                                     alocacoes.removeIf(a -> a.getPalestra().equals(palestra_de_busca));
                                                     Alocacao alocacao = new Alocacao(local, palestra);
                                                     alocacoes.add(alocacao);
+                                                    System.out.println("Relação alterada com sucesso");
                                                     break;
                                                 } else {
                                                     System.out.println("Conflito com horários");
@@ -947,6 +950,7 @@ public class Sistema {
                                                 apresentacoes.removeIf(a -> a.getPalestra().equals(palestra_de_busca));
                                                 Apresentacao apresentacao = new Apresentacao(palestrante, palestra);
                                                 apresentacoes.add(apresentacao);
+                                                System.out.println("Relação alterada com sucesso");
                                                 break;
                                             } else if (index_palestrante == -1) {
                                                 break;
