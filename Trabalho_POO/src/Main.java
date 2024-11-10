@@ -31,6 +31,7 @@ public class Main {
             System.out.println("15 - Gerar lista de presença");
             System.out.println("16 - Listar locais e suas palestras");
             System.out.println("17 - Listar palestras de um participante");
+            System.out.println("18 - Emitir certificados de uma palestra");
             try{
                 Integer choice = sistema.getInteger(sc, "Qual ação você deseja fazer ?: ");
                 System.out.println("\n");
