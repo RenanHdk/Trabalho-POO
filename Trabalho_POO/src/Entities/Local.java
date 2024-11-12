@@ -43,11 +43,5 @@ public class Local {
         Recursos = recursos;
     }
 
-/*
-    public void ListarPalestras(){
-        this.Paletras.forEach((a) -> System.out.println(a.getInicio() + " - " + a.getFim() + " -> " + a.getNome() + ": " + a.getDescricao()));
-
-    }
-*/
 }
 
