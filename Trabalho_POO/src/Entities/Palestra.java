@@ -59,7 +59,7 @@ public class Palestra {
         Vagas = vagas;
     }
 
-    public boolean isEmiteCertificado() {
+    public boolean getEmiteCertificado() {
         return EmiteCertificado;
     }
 
